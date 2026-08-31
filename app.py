@@ -1,3 +1,12 @@
+"""
+GTA VI Vice City — VIP Meal Tracker & Cyber Scanner
+Flask backend with robust multi-strategy badge matching:
+  1. Perceptual Image Hash (pHash) matching on full badge
+  2. Filename-based pass ID extraction
+  3. Text/slogan/name matching
+  4. Direct scan code / HMAC verification
+"""
+
 import os
 import json
 import time
@@ -82,97 +91,171 @@ def save_meal_db(db):
         json.dump(db, f, indent=2, ensure_ascii=False)
 
 
+# ── Perceptual Hash (pHash) Image Fingerprint Engine ──
+# Instead of matching just the center circle, we compute a perceptual hash
+# of the FULL badge image. pHash is robust to scaling, minor rotation,
+# brightness changes, and JPEG compression — perfect for camera scans.
+
 try:
     import numpy as np
     HAS_NUMPY = True
 except ImportError:
     HAS_NUMPY = False
 
-# ── Medallion Fingerprint CV Engine ──
-MEDALLION_FINGERPRINTS = {}
+BADGE_PHASHES = {}  # pass_id -> phash_bits (list of 0/1, length 256)
+BADGE_COLOR_SIGS = {}  # pass_id -> color signature tuple
 
-def extract_circle_fingerprint(img):
-    """Extracts and normalizes the 32x32 radial fingerprint of the middle circle."""
+
+def compute_phash(img, hash_size=16):
+    """Compute a perceptual hash of an image.
+    
+    1. Convert to grayscale
+    2. Resize to (hash_size+1) x hash_size
+    3. Compute horizontal gradient (difference hash variant)
+    4. Return binary hash as list of bits
+    
+    This is robust to scaling, brightness, contrast, and minor geometric changes.
+    """
     try:
-        w, h = img.size
-        cx = w // 2
-        cy = int(h * 490 / 900)
-        r = int(w * 0.22)
-        box = (max(0, cx - r), max(0, cy - r), min(w, cx + r), min(h, cy + r))
-        crop = img.crop(box).convert("L").resize((32, 32))
+        gray = img.convert("L")
+        resized = gray.resize((hash_size + 1, hash_size), Image.Resampling.LANCZOS)
+        pixels = list(resized.getdata())
         
-        if HAS_NUMPY:
-            arr = np.array(crop, dtype=np.float32)
-            arr = (arr - arr.mean()) / (arr.std() + 1e-6)
-            return arr.flatten()
-        else:
-            raw_pixels = list(crop.getdata())
-            mean = sum(raw_pixels) / len(raw_pixels)
-            variance = sum((p - mean) ** 2 for p in raw_pixels) / len(raw_pixels)
-            std = math.sqrt(variance) + 1e-6
-            return [(p - mean) / std for p in raw_pixels]
+        bits = []
+        for row in range(hash_size):
+            for col in range(hash_size):
+                idx = row * (hash_size + 1) + col
+                bits.append(1 if pixels[idx] < pixels[idx + 1] else 0)
+        
+        return bits
     except Exception:
         return None
 
 
-def init_medallion_bank():
-    global MEDALLION_FINGERPRINTS
-    MEDALLION_FINGERPRINTS = {}
+def compute_color_signature(img):
+    """Compute a color histogram signature of the badge.
+    
+    Extracts color distribution in HSV space focusing on the unique
+    elements (name text color position, slogan text, medallion rays).
+    Returns a tuple of histogram bin values.
+    """
+    try:
+        # Sample from key regions of the badge
+        w, h = img.size
+        rgb = img.convert("RGB")
+        
+        # Region 1: Top area (name text region) - top 25%
+        top_region = rgb.crop((0, 0, w, int(h * 0.25)))
+        # Region 2: Center area (medallion) - middle 40%
+        center_region = rgb.crop((int(w * 0.2), int(h * 0.25), int(w * 0.8), int(h * 0.75)))
+        # Region 3: Bottom area (slogan) - bottom 15%
+        bottom_region = rgb.crop((0, int(h * 0.85), w, h))
+        
+        def region_histogram(region, bins=8):
+            """Get a simplified color histogram for a region."""
+            small = region.resize((32, 32), Image.Resampling.LANCZOS)
+            pixels = list(small.getdata())
+            hist = [0] * (bins * 3)  # R, G, B each with 'bins' buckets
+            for r, g, b in pixels:
+                hist[r * bins // 256] += 1
+                hist[bins + g * bins // 256] += 1
+                hist[bins * 2 + b * bins // 256] += 1
+            total = len(pixels)
+            return tuple(h / total for h in hist)
+        
+        sig = region_histogram(top_region) + region_histogram(center_region) + region_histogram(bottom_region)
+        return sig
+    except Exception:
+        return None
+
+
+def hamming_distance(hash1, hash2):
+    """Count the number of differing bits between two hashes."""
+    return sum(a != b for a, b in zip(hash1, hash2))
+
+
+def cosine_similarity_sigs(sig1, sig2):
+    """Compute cosine similarity between two color signatures."""
+    dot = sum(a * b for a, b in zip(sig1, sig2))
+    norm1 = math.sqrt(sum(a * a for a in sig1))
+    norm2 = math.sqrt(sum(b * b for b in sig2))
+    if norm1 == 0 or norm2 == 0:
+        return 0.0
+    return dot / (norm1 * norm2)
+
+
+def init_badge_fingerprints():
+    """Pre-compute perceptual hashes and color signatures for all 82 badge images."""
+    global BADGE_PHASHES, BADGE_COLOR_SIGS
+    BADGE_PHASHES = {}
+    BADGE_COLOR_SIGS = {}
+    
     if not os.path.exists(BADGES_DIR):
         return
+    
     for fname in os.listdir(BADGES_DIR):
         if fname.endswith(".png"):
             pid = os.path.splitext(fname)[0]
             fpath = os.path.join(BADGES_DIR, fname)
             try:
                 img = Image.open(fpath)
-                fp = extract_circle_fingerprint(img)
-                if fp is not None:
-                    MEDALLION_FINGERPRINTS[pid] = fp
+                
+                # Compute pHash
+                phash = compute_phash(img)
+                if phash is not None:
+                    BADGE_PHASHES[pid] = phash
+                
+                # Compute color signature
+                csig = compute_color_signature(img)
+                if csig is not None:
+                    BADGE_COLOR_SIGS[pid] = csig
+                    
             except Exception:
                 pass
-    print(f"Loaded {len(MEDALLION_FINGERPRINTS)} middle circle medallion fingerprints in memory (NumPy: {HAS_NUMPY}).")
+    
+    print(f"[INIT] Loaded {len(BADGE_PHASHES)} pHash fingerprints + {len(BADGE_COLOR_SIGS)} color signatures.")
 
 
-def match_circle_medallion(img):
-    """Matches a scanned middle circle against all 82 attendees in 1 millisecond."""
-    query_fp = extract_circle_fingerprint(img)
-    if query_fp is None or not MEDALLION_FINGERPRINTS:
+def match_badge_image(img):
+    """Match an uploaded/scanned badge image against all 82 stored badges.
+    
+    Uses a combined score from:
+    1. Perceptual Hash (pHash) hamming distance — structural similarity
+    2. Color signature cosine similarity — color distribution match
+    
+    Returns (best_pass_id, confidence_score) or (None, 0.0)
+    """
+    query_phash = compute_phash(img)
+    query_csig = compute_color_signature(img)
+    
+    if query_phash is None and query_csig is None:
         return None, 0.0
-
-    if HAS_NUMPY and isinstance(query_fp, np.ndarray):
-        q_norm = np.linalg.norm(query_fp)
-        if q_norm == 0:
-            return None, 0.0
-
-        best_pid = None
-        best_sim = -1.0
-
-        for pid, fp in MEDALLION_FINGERPRINTS.items():
-            sim = float(np.dot(query_fp, fp) / (q_norm * np.linalg.norm(fp)))
-            if sim > best_sim:
-                best_sim = sim
-                best_pid = pid
-
-        return best_pid, best_sim
-    else:
-        # Pure Python Cosine Similarity
-        q_norm = math.sqrt(sum(x * x for x in query_fp))
-        if q_norm == 0:
-            return None, 0.0
-
-        best_pid = None
-        best_sim = -1.0
-
-        for pid, fp in MEDALLION_FINGERPRINTS.items():
-            dot = sum(a * b for a, b in zip(query_fp, fp))
-            fp_norm = math.sqrt(sum(b * b for b in fp))
-            sim = dot / (q_norm * fp_norm + 1e-9)
-            if sim > best_sim:
-                best_sim = sim
-                best_pid = pid
-
-        return best_pid, best_sim
+    
+    best_pid = None
+    best_combined_score = -1.0
+    
+    for pid in set(list(BADGE_PHASHES.keys()) + list(BADGE_COLOR_SIGS.keys())):
+        phash_score = 0.0
+        color_score = 0.0
+        
+        # pHash similarity (convert hamming distance to similarity)
+        if query_phash and pid in BADGE_PHASHES:
+            dist = hamming_distance(query_phash, BADGE_PHASHES[pid])
+            max_dist = len(query_phash)  # 256 bits
+            phash_score = 1.0 - (dist / max_dist)
+        
+        # Color signature similarity
+        if query_csig and pid in BADGE_COLOR_SIGS:
+            color_score = cosine_similarity_sigs(query_csig, BADGE_COLOR_SIGS[pid])
+        
+        # Combined weighted score (pHash is more structural, color adds differentiation)
+        combined = phash_score * 0.55 + color_score * 0.45
+        
+        if combined > best_combined_score:
+            best_combined_score = combined
+            best_pid = pid
+    
+    return best_pid, best_combined_score
 
 
 def verify_hmac(pass_id: str, signature: str) -> bool:
@@ -280,7 +363,7 @@ def handle_meal_claim(student, meal_db, force_override=False):
             "badge_color": "green",
             "meal_type": "STARTER",
             "title": "STARTER APPROVED",
-            "message": f"Starter served to {student['name']} ({student['batch']}). Middle Medallion Authenticated.",
+            "message": f"Starter served to {student['name']} ({student['batch']}). Badge Authenticated.",
             "student": student,
             "cooldown_seconds": MEAL_COOLDOWN_SECONDS,
             "next_available_in": MEAL_COOLDOWN_SECONDS
@@ -366,9 +449,20 @@ def process_scan():
     return handle_meal_claim(student, meal_db, force_override=force_override)
 
 
-@app.route("/api/scan_medallion", methods=["POST"])
-def process_medallion_scan():
-    """Scans and matches the middle circle medallion from base64 image frame or upload."""
+@app.route("/api/scan_image", methods=["POST"])
+def process_image_scan():
+    """Scans a badge image using perceptual hash + color signature matching.
+    
+    Accepts:
+    - image: base64-encoded image data (from camera frame or file upload)
+    - filename: original filename (used for pass ID extraction)
+    - text: any OCR-extracted text hint from client-side
+    
+    Matching pipeline:
+    1. Filename-based pass ID extraction (most reliable for file uploads)
+    2. Perceptual hash + color signature image matching
+    3. Text/slogan/name fallback matching
+    """
     data = request.get_json() or {}
     image_b64 = data.get("image", "")
     filename = data.get("filename", "")
@@ -376,21 +470,7 @@ def process_medallion_scan():
 
     meal_db = load_meal_db()
 
-    # 1. Medallion Visual Fingerprint Scan
-    if image_b64:
-        try:
-            if "," in image_b64:
-                image_b64 = image_b64.split(",")[1]
-            img_bytes = base64.b64decode(image_b64)
-            img = Image.open(io.BytesIO(img_bytes))
-            matched_pid, sim = match_circle_medallion(img)
-            
-            if matched_pid and sim >= 0.70 and matched_pid in meal_db:
-                return handle_meal_claim(meal_db[matched_pid], meal_db)
-        except Exception as e:
-            pass
-
-    # 2. Filename Match
+    # Strategy 1: Filename Match (most reliable for file uploads)
     if filename:
         clean_name = os.path.splitext(filename)[0].upper()
         p_match = re.search(r"VC6\s*-?\s*0*([1-9][0-9]?)", clean_name)
@@ -400,7 +480,22 @@ def process_medallion_scan():
             if target_pid in meal_db:
                 return handle_meal_claim(meal_db[target_pid], meal_db)
 
-    # 3. Text / Slogan Match
+    # Strategy 2: Perceptual Hash + Color Signature Image Matching
+    if image_b64:
+        try:
+            if "," in image_b64:
+                image_b64 = image_b64.split(",")[1]
+            img_bytes = base64.b64decode(image_b64)
+            img = Image.open(io.BytesIO(img_bytes))
+            
+            matched_pid, confidence = match_badge_image(img)
+            
+            if matched_pid and confidence >= 0.60 and matched_pid in meal_db:
+                return handle_meal_claim(meal_db[matched_pid], meal_db)
+        except Exception as e:
+            print(f"[SCAN] Image decode error: {e}")
+
+    # Strategy 3: Text / Slogan / Name Match
     if text_hint:
         student, _ = parse_and_find_student(text_hint, meal_db)
         if student:
@@ -409,9 +504,16 @@ def process_medallion_scan():
     return jsonify({
         "status": "ERROR",
         "badge_color": "red",
-        "title": "Medallion Not Recognized",
-        "message": "Hold the center circle steadily inside the radar reticle or tap attendee name below."
+        "title": "Badge Not Recognized",
+        "message": "Could not match this badge. Try uploading a clearer image or use the attendee search below."
     }), 400
+
+
+# Keep the old endpoint name for backward compatibility
+@app.route("/api/scan_medallion", methods=["POST"])
+def process_medallion_scan():
+    """Backward-compatible alias for scan_image."""
+    return process_image_scan()
 
 
 @app.route("/api/stats", methods=["GET"])
@@ -517,7 +619,7 @@ if __name__ == "__main__":
         from generate_dataset import build_dataset
         build_dataset()
     load_meal_db()
-    init_medallion_bank()
+    init_badge_fingerprints()
 
     use_ssl = os.environ.get("USE_SSL", "0") == "1"
     ssl_ctx = "adhoc" if use_ssl else None

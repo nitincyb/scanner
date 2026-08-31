@@ -8,8 +8,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Tesseract.js for High Performance Pass OCR -->
-  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 
   <style>
     :root {
@@ -173,28 +171,55 @@
       object-fit: cover;
     }
 
-    /* Cyber Circular Radar Reticle */
-    .target-radar {
+    /* Cyber Rectangular Scanner Reticle */
+    .target-rect {
       position: absolute;
-      width: 72%;
-      height: 72%;
-      border-radius: 50%;
-      border: 2px dashed rgba(0, 229, 255, 0.7);
+      width: 80%;
+      height: 75%;
+      border: 2px solid rgba(0, 229, 255, 0.7);
+      border-radius: 12px;
       box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45), 0 0 15px var(--cyan);
       pointer-events: none;
-      animation: radarRotate 12s linear infinite;
     }
 
-    @keyframes radarRotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-    .target-inner-ring {
+    /* Corner markers for scanner reticle */
+    .target-rect::before,
+    .target-rect::after {
+      content: '';
       position: absolute;
-      width: 38%;
-      height: 38%;
-      border-radius: 50%;
-      border: 2px solid rgba(255, 0, 127, 0.6);
-      box-shadow: 0 0 10px var(--pink);
+      width: 24px;
+      height: 24px;
+      border-color: var(--pink);
+      border-style: solid;
+    }
+    .target-rect::before {
+      top: -2px; left: -2px;
+      border-width: 3px 0 0 3px;
+      border-radius: 4px 0 0 0;
+    }
+    .target-rect::after {
+      top: -2px; right: -2px;
+      border-width: 3px 3px 0 0;
+      border-radius: 0 4px 0 0;
+    }
+
+    .corner-bl, .corner-br {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border-color: var(--pink);
+      border-style: solid;
       pointer-events: none;
+    }
+    .corner-bl {
+      bottom: -2px; left: -2px;
+      border-width: 0 0 3px 3px;
+      border-radius: 0 0 0 4px;
+    }
+    .corner-br {
+      bottom: -2px; right: -2px;
+      border-width: 0 3px 3px 0;
+      border-radius: 0 0 4px 0;
     }
 
     /* Scanning Laser */
@@ -244,6 +269,35 @@
       font-weight: 600;
       cursor: pointer;
       z-index: 20;
+    }
+
+    .capture-btn {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 3px solid rgba(255, 255, 255, 0.8);
+      background: linear-gradient(135deg, var(--cyan), var(--pink));
+      cursor: pointer;
+      z-index: 20;
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .capture-btn:hover {
+      transform: translateX(-50%) scale(1.1);
+      box-shadow: 0 0 30px rgba(0, 229, 255, 0.8);
+    }
+
+    .capture-btn:active {
+      transform: translateX(-50%) scale(0.95);
     }
 
     /* ── Live Scanner Status Bar ── */
@@ -395,6 +449,7 @@
       border-radius: 6px;
       cursor: pointer;
       transition: all 0.2s;
+      white-space: nowrap;
     }
 
     .btn-claim:hover {
@@ -487,6 +542,44 @@
 
     /* Hidden File Input */
     #file-upload-input { display: none; }
+
+    /* Scanning animation overlay */
+    .scanning-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 229, 255, 0.1);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 30;
+      backdrop-filter: blur(2px);
+    }
+    .scanning-overlay.active { display: flex; }
+    .scanning-spinner {
+      width: 60px;
+      height: 60px;
+      border: 3px solid transparent;
+      border-top-color: var(--cyan);
+      border-right-color: var(--pink);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Preview thumbnail */
+    .preview-thumb {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      border: 2px solid var(--cyan);
+      object-fit: cover;
+      z-index: 25;
+      display: none;
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+    }
   </style>
 </head>
 <body>
@@ -519,7 +612,7 @@
       <!-- Status Bar -->
       <div class="scanner-live-bar" id="live-status-bar">
         <span class="logo-pulse"></span>
-        <span id="live-status-text">Camera Active — Hold pass inside radar reticle</span>
+        <span id="live-status-text">Camera Active — Hold pass in frame & tap 📸 to scan</span>
       </div>
 
       <!-- Status Alert Banner -->
@@ -532,11 +625,18 @@
       <div class="viewfinder-card">
         <div class="camera-wrapper">
           <video id="camera-feed" autoplay playsinline muted></video>
-          <div class="target-radar"></div>
-          <div class="target-inner-ring"></div>
+          <div class="target-rect">
+            <div class="corner-bl"></div>
+            <div class="corner-br"></div>
+          </div>
           <div class="scan-laser"></div>
-          <div class="reticle-label">GTA VI MEDALLION TARGET</div>
+          <div class="reticle-label">ALIGN VIP PASS INSIDE FRAME</div>
           <button class="flip-btn" onclick="switchCamera()">🔄 Flip Cam</button>
+          <button class="capture-btn" id="capture-btn" onclick="captureAndScan()">📸</button>
+          <img class="preview-thumb" id="preview-thumb" alt="Last scan">
+          <div class="scanning-overlay" id="scanning-overlay">
+            <div class="scanning-spinner"></div>
+          </div>
         </div>
       </div>
 
@@ -609,7 +709,7 @@
     </div>
   </main>
 
-  <canvas id="ocr-canvas" style="display:none;"></canvas>
+  <canvas id="scan-canvas" style="display:none;"></canvas>
 
   <script>
     let activeStream = null;
@@ -617,17 +717,8 @@
     let attendeesDB = [];
     let isProcessing = false;
     let scanCooldown = false;
-    let ocrWorker = null;
 
-    // 1. Initialize OCR Worker & Attendees
-    async function initOCR() {
-      try {
-        ocrWorker = await Tesseract.createWorker('eng');
-      } catch (e) {
-        console.warn('OCR Worker Init fallback:', e);
-      }
-    }
-
+    // ── Load Attendees ──
     async function loadAttendees() {
       try {
         const res = await fetch('/api/search?q=');
@@ -714,7 +805,7 @@
       renderDirectory(filtered);
     }
 
-    // 2. Camera Controls
+    // ── Camera Controls ──
     async function startCamera() {
       try {
         if (activeStream) {
@@ -731,8 +822,7 @@
         const video = document.getElementById('camera-feed');
         video.srcObject = activeStream;
         await video.play();
-        document.getElementById('live-status-text').innerHTML = 'Camera Active — Hold pass inside radar';
-        startCameraScanningLoop();
+        document.getElementById('live-status-text').innerHTML = 'Camera Active — Hold pass in frame & tap 📸 to scan';
       } catch (err) {
         document.getElementById('live-status-text').innerHTML =
           '<span style="color:var(--orange);">Camera unavailable — Use "Upload Pass Image" or Instant Search below</span>';
@@ -744,58 +834,81 @@
       startCamera();
     }
 
-    // 3. Real-time Middle Circle Medallion Scanning Loop
-    function startCameraScanningLoop() {
+    // ── Capture & Scan (Tap to Scan) ──
+    async function captureAndScan() {
+      if (isProcessing || scanCooldown) return;
+      
       const video = document.getElementById('camera-feed');
-      const canvas = document.getElementById('ocr-canvas');
-      const ctx = canvas.getContext('2d');
+      if (!activeStream || video.readyState !== 4) {
+        showBanner({ status: 'ERROR', badge_color: 'red', title: 'Camera Not Ready', message: 'Please wait for the camera to initialize.' });
+        return;
+      }
 
-      setInterval(async () => {
-        if (isProcessing || scanCooldown || !activeStream || video.readyState !== 4) return;
-        isProcessing = true;
+      isProcessing = true;
+      const overlay = document.getElementById('scanning-overlay');
+      overlay.classList.add('active');
+      
+      document.getElementById('live-status-text').innerHTML = 
+        '<span style="color:var(--cyan);font-weight:700;">⏳ Scanning Badge...</span>';
 
-        try {
-          canvas.width = 480;
-          canvas.height = 480;
-          ctx.drawImage(video, 0, 0, 480, 480);
-          const frameB64 = canvas.toDataURL('image/jpeg', 0.85);
+      try {
+        const canvas = document.getElementById('scan-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Capture at high resolution for better matching
+        const captureWidth = Math.min(video.videoWidth, 900);
+        const captureHeight = Math.min(video.videoHeight, 900);
+        canvas.width = captureWidth;
+        canvas.height = captureHeight;
+        ctx.drawImage(video, 0, 0, captureWidth, captureHeight);
+        
+        // Show preview thumbnail
+        const thumb = document.getElementById('preview-thumb');
+        thumb.src = canvas.toDataURL('image/jpeg', 0.7);
+        thumb.style.display = 'block';
+        
+        // Send full image to backend for pHash matching
+        const frameB64 = canvas.toDataURL('image/jpeg', 0.9);
+        
+        const res = await fetch('/api/scan_image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ image: frameB64 })
+        });
 
-          // 1. Scan Middle Medallion Visually via CV Engine
-          const res = await fetch('/api/scan_medallion', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ image: frameB64 })
-          });
-
-          if (res.ok) {
-            const data = await res.json();
-            showBanner(data);
-            loadAttendees();
-            loadStats();
-            loadActivity();
-            triggerScanCooldown();
-          }
-        } catch (err) {
-        } finally {
-          isProcessing = false;
+        const data = await res.json();
+        showBanner(data);
+        loadAttendees();
+        loadStats();
+        loadActivity();
+        
+        if (res.ok) {
+          triggerScanCooldown();
         }
-      }, 400);
+      } catch (err) {
+        showBanner({ status: 'ERROR', badge_color: 'red', title: 'Scan Error', message: 'Could not connect to server.' });
+      } finally {
+        isProcessing = false;
+        overlay.classList.remove('active');
+      }
     }
 
     function triggerScanCooldown() {
       scanCooldown = true;
       if (navigator.vibrate) navigator.vibrate(150);
       document.getElementById('live-status-text').innerHTML =
-        '<span style="color:var(--cyan);font-weight:700;">Sonic Medallion Authenticated!</span>';
+        '<span style="color:var(--green);font-weight:700;">✓ Badge Authenticated!</span>';
       setTimeout(() => {
         scanCooldown = false;
         if (activeStream) {
-          document.getElementById('live-status-text').innerHTML = 'Camera Active — Hold pass inside radar';
+          document.getElementById('live-status-text').innerHTML = 'Camera Active — Hold pass in frame & tap 📸 to scan';
         }
+        // Hide preview thumb after cooldown
+        document.getElementById('preview-thumb').style.display = 'none';
       }, 2400);
     }
 
-    // 4. File Upload & Direct Pass Scan
+    // ── File Upload & Direct Pass Scan ──
     function triggerFileUpload() {
       document.getElementById('file-upload-input').click();
     }
@@ -805,13 +918,19 @@
       const file = input.files[0];
       const statusText = document.getElementById('live-status-text');
 
-      statusText.innerHTML = "<span class='logo-pulse'></span> Scanning Middle Circle Medallion...";
+      statusText.innerHTML = "<span class='logo-pulse'></span> Scanning Badge Image...";
 
       const reader = new FileReader();
       reader.onload = async (e) => {
         const imageB64 = e.target.result;
+        
+        // Show preview
+        const thumb = document.getElementById('preview-thumb');
+        thumb.src = imageB64;
+        thumb.style.display = 'block';
+        
         try {
-          const res = await fetch('/api/scan_medallion', {
+          const res = await fetch('/api/scan_image', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ image: imageB64, filename: file.name })
@@ -832,57 +951,7 @@
       reader.readAsDataURL(file);
     }
 
-    // 5. Intelligent Multi-Tier Matcher
-    function findStudentFromText(raw) {
-      if (!raw) return null;
-      const upper = raw.toUpperCase();
-      const cleanUpper = upper.replace(/[^A-Z0-9 ]/g, ' ');
-
-      // Tier 1: Pass ID regex (VC6-0001 to VC6-0082)
-      const pMatch = upper.match(/VC6\s*-?\s*0*([1-9][0-9]?)/);
-      if (pMatch) {
-        const num = String(pMatch[1]).padStart(4, '0');
-        const target = 'VC6-' + num;
-        const found = attendeesDB.find(x => x.pass_id === target);
-        if (found) return found;
-      }
-
-      // Tier 2: Slogan Keywords (Every pass has a unique printed slogan!)
-      const tokens = cleanUpper.split(/\s+/).filter(w => w.length >= 4);
-      let bestSloganMatch = null;
-      let maxOverlap = 0;
-
-      for (const s of attendeesDB) {
-        if (!s.slogan) continue;
-        const sClean = s.slogan.toUpperCase().replace(/[^A-Z0-9 ]/g, ' ');
-        const sTokens = sClean.split(/\s+/).filter(w => w.length >= 4);
-        
-        let overlap = 0;
-        for (const t of tokens) {
-          if (sTokens.includes(t)) overlap++;
-        }
-
-        if (overlap >= 2 && overlap > maxOverlap) {
-          maxOverlap = overlap;
-          bestSloganMatch = s;
-        }
-      }
-
-      if (bestSloganMatch) return bestSloganMatch;
-
-      // Tier 3: Attendee Name
-      for (const s of attendeesDB) {
-        const sName = s.name.toUpperCase();
-        const parts = sName.split(' ').filter(p => p.length >= 3);
-        if (parts.length > 0 && parts.every(part => cleanUpper.includes(part))) {
-          return s;
-        }
-      }
-
-      return null;
-    }
-
-    // 6. Claim Meal Action
+    // ── Claim Meal Action ──
     async function claimMeal(code) {
       if (scanCooldown) return;
       scanCooldown = true;
@@ -909,7 +978,7 @@
         setTimeout(() => {
           scanCooldown = false;
           if (activeStream) {
-            document.getElementById('live-status-text').innerHTML = 'Camera Active — Hold pass inside radar';
+            document.getElementById('live-status-text').innerHTML = 'Camera Active — Hold pass in frame & tap 📸 to scan';
           }
         }, 2200);
       }
@@ -983,7 +1052,6 @@
     function escHtml(str) { const d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
 
     window.addEventListener('DOMContentLoaded', () => {
-      initOCR();
       loadAttendees();
       loadStats();
       loadActivity();
