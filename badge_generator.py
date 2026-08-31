@@ -338,89 +338,58 @@ def generate_right_palm(w=420, h=640):
     return grad_img.resize((w, h), resample)
 
 
-def generate_cyber_radial_medallion(scan_code, size=430):
+def generate_cyber_radial_medallion(pass_id, size=430):
     scale = 2
     S = size * scale
     img = Image.new("RGBA", (S, S), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
     cx, cy = S // 2, S // 2
-    r_outer = S // 2 - 10
-    r_disc = r_outer - 28
+    r_disc = S // 2 - 20 * scale
 
-    glow_colors = [
-        (255, 10, 160, 255),
-        (0, 215, 255, 255),
-        (160, 20, 240, 255),
-        (0, 180, 255, 255),
-    ]
-    for i in range(16):
-        r = r_outer - i * 2
-        draw.ellipse(
-            [cx - r, cy - r, cx + r, cy + r],
-            outline=glow_colors[i % len(glow_colors)],
-            width=3,
-        )
-
-    disc_mask = Image.new("L", (S, S), 0)
-    ImageDraw.Draw(disc_mask).ellipse(
-        [cx - r_disc, cy - r_disc, cx + r_disc, cy + r_disc], fill=255
-    )
-
-    disc_layer = Image.new("RGBA", (S, S), (0, 0, 0, 0))
-    dldraw = ImageDraw.Draw(disc_layer)
-    for y in range(int(cy - r_disc), int(cy)):
-        t = (y - (cy - r_disc)) / r_disc
-        c = get_gta_pbp_gradient(t)
-        dldraw.line(
-            [(cx - r_disc - 5, y), (cx + r_disc + 5, y)],
-            fill=(c[0], c[1], c[2], 255),
-        )
-    dldraw.rectangle(
-        [cx - r_disc - 5, cy, cx + r_disc + 5, cy + r_disc + 5],
-        fill=SOLID_BLACK,
-    )
-    disc_layer.putalpha(disc_mask)
-    img.paste(disc_layer, (0, 0), disc_layer)
-
-    draw.line(
-        [(cx - r_disc + 6, cy), (cx + r_disc - 6, cy)],
-        fill=(0, 235, 255, 255),
-        width=5,
-    )
-
-    hash_bytes = hashlib.sha256(scan_code.encode("utf-8")).digest()
-    num_rays = 48
-    for i in range(num_rays):
-        angle = (i / num_rays) * 2 * math.pi
-        val = hash_bytes[i % len(hash_bytes)]
-        ray_len = (r_disc * 0.35) + (val / 255.0) * (r_disc * 0.52)
-
-        t_col = (math.sin(angle) + 1) / 2
-        rgb = get_gta_pbp_gradient(t_col)
-
-        x1 = cx + math.cos(angle) * (r_disc * 0.22)
-        y1 = cy + math.sin(angle) * (r_disc * 0.22)
-        x2 = cx + math.cos(angle) * ray_len
-        y2 = cy + math.sin(angle) * ray_len
-
-        draw.line([(x1, y1), (x2, y2)], fill=(rgb[0], rgb[1], rgb[2], 230), width=4)
-        draw.ellipse([x2 - 4, y2 - 4, x2 + 4, y2 + 4], fill=(255, 255, 255, 255))
-
-    draw.ellipse(
-        [cx - r_disc * 0.20, cy - r_disc * 0.20, cx + r_disc * 0.20, cy + r_disc * 0.20],
-        fill=(15, 23, 42, 255),
-        outline=(0, 235, 255, 255),
-        width=4,
-    )
-    draw.ellipse(
-        [cx - r_disc * 0.08, cy - r_disc * 0.08, cx + r_disc * 0.08, cy + r_disc * 0.08],
-        fill=(255, 10, 160, 255),
-    )
-
+    # Outer Neon Glowing Cyber Rings
     draw.ellipse(
         [cx - r_disc, cy - r_disc, cx + r_disc, cy + r_disc],
-        outline=(255, 215, 40, 255),
-        width=5,
+        fill=(10, 15, 30, 255),
+        outline=(0, 229, 255, 255),
+        width=7 * scale,
+    )
+    draw.ellipse(
+        [cx - r_disc + 7 * scale, cy - r_disc + 7 * scale, cx + r_disc - 7 * scale, cy + r_disc - 7 * scale],
+        outline=(255, 0, 127, 255),
+        width=4 * scale,
+    )
+
+    # 24 Bold Quantized Data Rays with White Terminal Dots
+    hash_bytes = hashlib.sha256(pass_id.encode("utf-8")).digest()
+    num_bars = 24
+    inner_r = r_disc * 0.36
+    max_len = r_disc * 0.48
+
+    for i in range(num_bars):
+        angle = (i / num_bars) * 2 * math.pi
+        level = (hash_bytes[i % len(hash_bytes)] % 6) + 1
+        bar_len = inner_r + (level / 6.0) * max_len
+
+        x1 = cx + math.cos(angle) * inner_r
+        y1 = cy + math.sin(angle) * inner_r
+        x2 = cx + math.cos(angle) * bar_len
+        y2 = cy + math.sin(angle) * bar_len
+
+        col = (0, 229, 255, 255) if math.sin(angle) < 0 else (255, 0, 127, 255)
+        draw.line([(x1, y1), (x2, y2)], fill=col, width=7 * scale)
+        dot_r = 5 * scale
+        draw.ellipse([x2 - dot_r, y2 - dot_r, x2 + dot_r, y2 + dot_r], fill=(255, 255, 255, 255))
+
+    # Center Bullseye Core
+    draw.ellipse(
+        [cx - inner_r * 0.82, cy - inner_r * 0.82, cx + inner_r * 0.82, cy + inner_r * 0.82],
+        fill=(15, 23, 42, 255),
+        outline=(0, 229, 255, 255),
+        width=4 * scale,
+    )
+    draw.ellipse(
+        [cx - inner_r * 0.38, cy - inner_r * 0.38, cx + inner_r * 0.38, cy + inner_r * 0.38],
+        fill=(255, 0, 127, 255),
     )
 
     resample = getattr(Image, "Resampling", Image).LANCZOS if hasattr(Image, "Resampling") else getattr(Image, "LANCZOS", 1)
@@ -441,7 +410,7 @@ def create_badge(student, slogan_text, left_palm, right_palm):
     # 2. CENTER: Cyber Sonic Medallion (Layered ON TOP of palm fronds)
     medallion_size = 430
     medallion = generate_cyber_radial_medallion(
-        student["scan_code"], size=medallion_size
+        student["pass_id"], size=medallion_size
     )
     mx = (BADGE_SIZE - medallion_size) // 2
     my = 275
