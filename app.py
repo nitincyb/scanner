@@ -6,9 +6,9 @@ import hashlib
 import re
 import base64
 import io
+import math
 from datetime import datetime
 from PIL import Image
-import numpy as np
 from flask import Flask, render_template, request, jsonify, send_from_directory
 
 app = Flask(__name__)
@@ -82,6 +82,12 @@ def save_meal_db(db):
         json.dump(db, f, indent=2, ensure_ascii=False)
 
 
+try:
+    import numpy as np
+    HAS_NUMPY = True
+except ImportError:
+    HAS_NUMPY = False
+
 # ── Medallion Fingerprint CV Engine ──
 MEDALLION_FINGERPRINTS = {}
 
@@ -89,15 +95,22 @@ def extract_circle_fingerprint(img):
     """Extracts and normalizes the 32x32 radial fingerprint of the middle circle."""
     try:
         w, h = img.size
-        # The medallion is centered at x=w/2, y=h*(275+215)/900
         cx = w // 2
         cy = int(h * 490 / 900)
         r = int(w * 0.22)
         box = (max(0, cx - r), max(0, cy - r), min(w, cx + r), min(h, cy + r))
         crop = img.crop(box).convert("L").resize((32, 32))
-        arr = np.array(crop, dtype=np.float32)
-        arr = (arr - arr.mean()) / (arr.std() + 1e-6)
-        return arr
+        
+        if HAS_NUMPY:
+            arr = np.array(crop, dtype=np.float32)
+            arr = (arr - arr.mean()) / (arr.std() + 1e-6)
+            return arr.flatten()
+        else:
+            raw_pixels = list(crop.getdata())
+            mean = sum(raw_pixels) / len(raw_pixels)
+            variance = sum((p - mean) ** 2 for p in raw_pixels) / len(raw_pixels)
+            std = math.sqrt(variance) + 1e-6
+            return [(p - mean) / std for p in raw_pixels]
     except Exception:
         return None
 
@@ -118,7 +131,7 @@ def init_medallion_bank():
                     MEDALLION_FINGERPRINTS[pid] = fp
             except Exception:
                 pass
-    print(f"Loaded {len(MEDALLION_FINGERPRINTS)} middle circle medallion fingerprints in memory.")
+    print(f"Loaded {len(MEDALLION_FINGERPRINTS)} middle circle medallion fingerprints in memory (NumPy: {HAS_NUMPY}).")
 
 
 def match_circle_medallion(img):
@@ -127,22 +140,39 @@ def match_circle_medallion(img):
     if query_fp is None or not MEDALLION_FINGERPRINTS:
         return None, 0.0
 
-    q_flat = query_fp.flatten()
-    q_norm = np.linalg.norm(q_flat)
-    if q_norm == 0:
-        return None, 0.0
+    if HAS_NUMPY and isinstance(query_fp, np.ndarray):
+        q_norm = np.linalg.norm(query_fp)
+        if q_norm == 0:
+            return None, 0.0
 
-    best_pid = None
-    best_sim = -1.0
+        best_pid = None
+        best_sim = -1.0
 
-    for pid, fp in MEDALLION_FINGERPRINTS.items():
-        fp_flat = fp.flatten()
-        sim = float(np.dot(q_flat, fp_flat) / (q_norm * np.linalg.norm(fp_flat)))
-        if sim > best_sim:
-            best_sim = sim
-            best_pid = pid
+        for pid, fp in MEDALLION_FINGERPRINTS.items():
+            sim = float(np.dot(query_fp, fp) / (q_norm * np.linalg.norm(fp)))
+            if sim > best_sim:
+                best_sim = sim
+                best_pid = pid
 
-    return best_pid, best_sim
+        return best_pid, best_sim
+    else:
+        # Pure Python Cosine Similarity
+        q_norm = math.sqrt(sum(x * x for x in query_fp))
+        if q_norm == 0:
+            return None, 0.0
+
+        best_pid = None
+        best_sim = -1.0
+
+        for pid, fp in MEDALLION_FINGERPRINTS.items():
+            dot = sum(a * b for a, b in zip(query_fp, fp))
+            fp_norm = math.sqrt(sum(b * b for b in fp))
+            sim = dot / (q_norm * fp_norm + 1e-9)
+            if sim > best_sim:
+                best_sim = sim
+                best_pid = pid
+
+        return best_pid, best_sim
 
 
 def verify_hmac(pass_id: str, signature: str) -> bool:

@@ -6,12 +6,12 @@
     "pass_id": "VC6-0001",
     "signature": "2C1E07E123F1",
     "scan_code": "VC6-0001-2C1E07E123F1",
+    "slogan": "Ek saal nikaal liya, ab juniors ko bina wajah gyaan dene ka haq hai.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Ek saal nikaal liya, ab juniors ko bina wajah gyaan dene ka haq hai."
+    "logs": []
   },
   "VC6-0002": {
     "name": "Himanshu Singh",
@@ -20,12 +20,12 @@
     "pass_id": "VC6-0002",
     "signature": "8E88D2D0EC51",
     "scan_code": "VC6-0002-8E88D2D0EC51",
+    "slogan": "Party humne organize ki hai, toh VIP treatment toh hamara banta hai boss.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Party humne organize ki hai, toh VIP treatment toh hamara banta hai boss."
+    "logs": []
   },
   "VC6-0003": {
     "name": "Kapileshwar Gonewad",
@@ -34,12 +34,12 @@
     "pass_id": "VC6-0003",
     "signature": "BA69AAFD1171",
     "scan_code": "VC6-0003-BA69AAFD1171",
+    "slogan": "Placement ki tension kal dekhenge, aaj senior swag 200% on hai.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Placement ki tension kal dekhenge, aaj senior swag 200% on hai."
+    "logs": []
   },
   "VC6-0004": {
     "name": "Riyan Rajak",
@@ -48,12 +48,12 @@
     "pass_id": "VC6-0004",
     "signature": "F88BAC6E15FE",
     "scan_code": "VC6-0004-F88BAC6E15FE",
+    "slogan": "Juniors ke cringe dance moves judge karne ka alag hi maza hai.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Juniors ke cringe dance moves judge karne ka alag hi maza hai."
+    "logs": []
   },
   "VC6-0005": {
     "name": "Harshit",
@@ -62,12 +62,12 @@
     "pass_id": "VC6-0005",
     "signature": "08D80AA7D08E",
     "scan_code": "VC6-0005-08D80AA7D08E",
+    "slogan": "1st year walo ko lagta hai hum padhte hain, hume pata hai hum kya karte hain.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "1st year walo ko lagta hai hum padhte hain, hume pata hai hum kya karte hain."
+    "logs": []
   },
   "VC6-0006": {
     "name": "Hariom Singh",
@@ -76,12 +76,12 @@
     "pass_id": "VC6-0006",
     "signature": "49E24414A6C8",
     "scan_code": "VC6-0006-49E24414A6C8",
+    "slogan": "Attendance 40% hai par party presence 100% mandatory hai.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Attendance 40% hai par party presence 100% mandatory hai."
+    "logs": []
   },
   "VC6-0007": {
     "name": "Mohammad Irfan",
@@ -90,12 +90,12 @@
     "pass_id": "VC6-0007",
     "signature": "5F4534A95AAD",
     "scan_code": "VC6-0007-5F4534A95AAD",
+    "slogan": "Backlog ke dukh ko Vice City ke neon lights me bhula raha hoon.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Backlog ke dukh ko Vice City ke neon lights me bhula raha hoon."
+    "logs": []
   },
   "VC6-0008": {
     "name": "Hrishika Singh",
@@ -104,12 +104,12 @@
     "pass_id": "VC6-0008",
     "signature": "0A75F41EEAFC",
     "scan_code": "VC6-0008-0A75F41EEAFC",
+    "slogan": "Senior ban gaye par abhi bhi assignment submission se 5 min pehle banta hai.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Senior ban gaye par abhi bhi assignment submission se 5 min pehle banta hai."
+    "logs": []
   },
   "VC6-0009": {
     "name": "Nitin Mali",
@@ -118,26 +118,12 @@
     "pass_id": "VC6-0009",
     "signature": "53088E35666B",
     "scan_code": "VC6-0009-53088E35666B",
-    "starter_served": true,
-    "starter_time": 1788159747.4886546,
-    "main_served": true,
-    "main_time": 1788162243.0114589,
-    "logs": [
-      {
-        "meal": "STARTER",
-        "time": "2026-08-31 12:32:27",
-        "epoch": 1788159747.4886546
-      },
-      {
-        "meal": "MAIN_COURSE",
-        "time": "2026-08-31 13:14:03",
-        "epoch": 1788162243.0114589,
-        "forced": false
-      }
-    ],
-    "starter_time_str": "2026-08-31 12:32:27",
     "slogan": "Ek saal me hostel mess ne itna dard diya ki ab party me sukoon mila.",
-    "main_time_str": "2026-08-31 13:14:03"
+    "starter_served": false,
+    "starter_time": null,
+    "main_served": false,
+    "main_time": null,
+    "logs": []
   },
   "VC6-0010": {
     "name": "Mukund Kundan",
@@ -146,12 +132,12 @@
     "pass_id": "VC6-0010",
     "signature": "4F0E262C1DEA",
     "scan_code": "VC6-0010-4F0E262C1DEA",
+    "slogan": "Formal blazer isliye pehna taaki lag sake placement lagne wali hai.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Formal blazer isliye pehna taaki lag sake placement lagne wali hai."
+    "logs": []
   },
   "VC6-0011": {
     "name": "Bhumika Bharti",
@@ -160,12 +146,12 @@
     "pass_id": "VC6-0011",
     "signature": "C041F93FBE36",
     "scan_code": "VC6-0011-C041F93FBE36",
+    "slogan": "Juniors se izzat mangna padta hai, khana haq se chheenna padta hai.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Juniors se izzat mangna padta hai, khana haq se chheenna padta hai."
+    "logs": []
   },
   "VC6-0012": {
     "name": "Chandrima Majumdar",
@@ -174,12 +160,12 @@
     "pass_id": "VC6-0012",
     "signature": "A944033E81C5",
     "scan_code": "VC6-0012-A944033E81C5",
+    "slogan": "Seniorhood ka pehla niyam: Buffet me juniors ko line me lagao.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Seniorhood ka pehla niyam: Buffet me juniors ko line me lagao."
+    "logs": []
   },
   "VC6-0013": {
     "name": "Shivanshu",
@@ -188,12 +174,12 @@
     "pass_id": "VC6-0013",
     "signature": "06E34488F14A",
     "scan_code": "VC6-0013-06E34488F14A",
+    "slogan": "Hostel me 1 saal bina nahaye survive karne ka medal milna chahiye.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Hostel me 1 saal bina nahaye survive karne ka medal milna chahiye."
+    "logs": []
   },
   "VC6-0014": {
     "name": "Rixika Agarwal",
@@ -202,12 +188,12 @@
     "pass_id": "VC6-0014",
     "signature": "BDE42A6A10F5",
     "scan_code": "VC6-0014-BDE42A6A10F5",
+    "slogan": "CGPA girta gaya par senior wala attitude badhta gaya.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "CGPA girta gaya par senior wala attitude badhta gaya."
+    "logs": []
   },
   "VC6-0015": {
     "name": "Swini Singh",
@@ -216,12 +202,12 @@
     "pass_id": "VC6-0015",
     "signature": "0A121E12F119",
     "scan_code": "VC6-0015-0A121E12F119",
+    "slogan": "Last year hum fresher the, aaj hum hi boundary decide karte hain.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Last year hum fresher the, aaj hum hi boundary decide karte hain."
+    "logs": []
   },
   "VC6-0016": {
     "name": "Sidhant Raj",
@@ -230,12 +216,12 @@
     "pass_id": "VC6-0016",
     "signature": "5214B7B0A057",
     "scan_code": "VC6-0016-5214B7B0A057",
+    "slogan": "Juniors bol rahe the 'Bhaiya treat do', humne bola 'Party me aao'.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Juniors bol rahe the 'Bhaiya treat do', humne bola 'Party me aao'."
+    "logs": []
   },
   "VC6-0017": {
     "name": "Aman Dubey",
@@ -244,12 +230,12 @@
     "pass_id": "VC6-0017",
     "signature": "9C0E100928C7",
     "scan_code": "VC6-0017-9C0E100928C7",
+    "slogan": "Viva me blank hone ka 1 saal ka solid experience hai mere paas.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Viva me blank hone ka 1 saal ka solid experience hai mere paas."
+    "logs": []
   },
   "VC6-0018": {
     "name": "Chandra Prakash Suthar",
@@ -258,12 +244,12 @@
     "pass_id": "VC6-0018",
     "signature": "4FAFF5653075",
     "scan_code": "VC6-0018-4FAFF5653075",
+    "slogan": "Hum seniors hain, hum DJ wale ko order dete hain request nahi.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Hum seniors hain, hum DJ wale ko order dete hain request nahi."
+    "logs": []
   },
   "VC6-0019": {
     "name": "Navneet Singh",
@@ -272,12 +258,12 @@
     "pass_id": "VC6-0019",
     "signature": "208AB1A49520",
     "scan_code": "VC6-0019-208AB1A49520",
+    "slogan": "College life ka sach: 1st year me sapne, 2nd year me sirf survival.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "College life ka sach: 1st year me sapne, 2nd year me sirf survival."
+    "logs": []
   },
   "VC6-0020": {
     "name": "Charvi",
@@ -286,12 +272,12 @@
     "pass_id": "VC6-0020",
     "signature": "F07D94D623D6",
     "scan_code": "VC6-0020-F07D94D623D6",
+    "slogan": "Proxy lagane ki PhD ho chuki hai, kisi junior ko coaching chahiye?",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Proxy lagane ki PhD ho chuki hai, kisi junior ko coaching chahiye?"
+    "logs": []
   },
   "VC6-0021": {
     "name": "Saumya Mishra",
@@ -300,12 +286,12 @@
     "pass_id": "VC6-0021",
     "signature": "E8FE18BBD007",
     "scan_code": "VC6-0021-E8FE18BBD007",
+    "slogan": "Syllabus kabhi complete nahi hua par party list hamesha ready rahi.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Syllabus kabhi complete nahi hua par party list hamesha ready rahi."
+    "logs": []
   },
   "VC6-0022": {
     "name": "Shreyashee Gupta",
@@ -314,12 +300,12 @@
     "pass_id": "VC6-0022",
     "signature": "DA5BD6CF9E74",
     "scan_code": "VC6-0022-DA5BD6CF9E74",
+    "slogan": "Juniors ko bolte hain 'Padh lo', khud raat 3 baje reels scroll karte hain.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Juniors ko bolte hain 'Padh lo', khud raat 3 baje reels scroll karte hain."
+    "logs": []
   },
   "VC6-0023": {
     "name": "Ayushman Dutta",
@@ -328,12 +314,12 @@
     "pass_id": "VC6-0023",
     "signature": "858D9C3F57AE",
     "scan_code": "VC6-0023-858D9C3F57AE",
+    "slogan": "Stage pe jaake mic pakadne ka confidence sirf 2nd year me aata hai.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Stage pe jaake mic pakadne ka confidence sirf 2nd year me aata hai."
+    "logs": []
   },
   "VC6-0024": {
     "name": "Pratham Bhardwaj",
@@ -342,12 +328,12 @@
     "pass_id": "VC6-0024",
     "signature": "C58F96482A32",
     "scan_code": "VC6-0024-C58F96482A32",
+    "slogan": "Dost bole kal submission hai, maine bola aaj Vice City ki raat hai.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Dost bole kal submission hai, maine bola aaj Vice City ki raat hai."
+    "logs": []
   },
   "VC6-0025": {
     "name": "Saksham Sharma",
@@ -356,12 +342,12 @@
     "pass_id": "VC6-0025",
     "signature": "006B61B22231",
     "scan_code": "VC6-0025-006B61B22231",
+    "slogan": "1st year ki innocence kho chuki hai, ab sirf pro jugad chalega.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "1st year ki innocence kho chuki hai, ab sirf pro jugad chalega."
+    "logs": []
   },
   "VC6-0026": {
     "name": "Palak",
@@ -370,12 +356,12 @@
     "pass_id": "VC6-0026",
     "signature": "0AB6778A7389",
     "scan_code": "VC6-0026-0AB6778A7389",
+    "slogan": "Formal shoes me pair dukh rahe hain par attitude zero compromise.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Formal shoes me pair dukh rahe hain par attitude zero compromise."
+    "logs": []
   },
   "VC6-0027": {
     "name": "Mahi Shashi",
@@ -384,12 +370,12 @@
     "pass_id": "VC6-0027",
     "signature": "96C0A19E288A",
     "scan_code": "VC6-0027-96C0A19E288A",
+    "slogan": "Canteen wale bhaiya se udhaar lene me ab koi sharm nahi aati.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Canteen wale bhaiya se udhaar lene me ab koi sharm nahi aati."
+    "logs": []
   },
   "VC6-0028": {
     "name": "Harshit Ram",
@@ -398,12 +384,12 @@
     "pass_id": "VC6-0028",
     "signature": "C84C4121390E",
     "scan_code": "VC6-0028-C84C4121390E",
+    "slogan": "Juniors humse impress hone aaye hain, hum buffet se impress ho rahe hain.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Juniors humse impress hone aaye hain, hum buffet se impress ho rahe hain."
+    "logs": []
   },
   "VC6-0029": {
     "name": "Shivansh Sahajpal",
@@ -412,12 +398,12 @@
     "pass_id": "VC6-0029",
     "signature": "77B227A91DD2",
     "scan_code": "VC6-0029-77B227A91DD2",
+    "slogan": "Ek saal purana blazer, naya swag, wahi purane dost.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Ek saal purana blazer, naya swag, wahi purane dost."
+    "logs": []
   },
   "VC6-0030": {
     "name": "Sakshi Phulwari",
@@ -426,12 +412,12 @@
     "pass_id": "VC6-0030",
     "signature": "5AC5BBBD773F",
     "scan_code": "VC6-0030-5AC5BBBD773F",
+    "slogan": "Assignment copy karne ka speed light ki speed se bhi fast hai.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Assignment copy karne ka speed light ki speed se bhi fast hai."
+    "logs": []
   },
   "VC6-0031": {
     "name": "Sakshi Priya",
@@ -440,12 +426,12 @@
     "pass_id": "VC6-0031",
     "signature": "793881222624",
     "scan_code": "VC6-0031-793881222624",
+    "slogan": "Subah 9 baje lab me neend aati hai, raat 12 baje full energy.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Subah 9 baje lab me neend aati hai, raat 12 baje full energy."
+    "logs": []
   },
   "VC6-0032": {
     "name": "Sneha Maity",
@@ -454,12 +440,12 @@
     "pass_id": "VC6-0032",
     "signature": "7B90697783DA",
     "scan_code": "VC6-0032-7B90697783DA",
+    "slogan": "Freshers party me aaye hain apna 1 saal ka trauma celebrate karne.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Freshers party me aaye hain apna 1 saal ka trauma celebrate karne."
+    "logs": []
   },
   "VC6-0033": {
     "name": "Shubham Kumar Gupta",
@@ -468,12 +454,12 @@
     "pass_id": "VC6-0033",
     "signature": "56874F265702",
     "scan_code": "VC6-0033-56874F265702",
+    "slogan": "Hostel warden se ladne ka 1 saal ka experience bolta hai!",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Hostel warden se ladne ka 1 saal ka experience bolta hai!"
+    "logs": []
   },
   "VC6-0034": {
     "name": "Ritabrata Ghosh",
@@ -482,12 +468,12 @@
     "pass_id": "VC6-0034",
     "signature": "F0780F4447FA",
     "scan_code": "VC6-0034-F0780F4447FA",
+    "slogan": "College dream Bollywood movie jaisa tha, par schedule engineering ban gaya.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "College dream Bollywood movie jaisa tha, par schedule engineering ban gaya."
+    "logs": []
   },
   "VC6-0035": {
     "name": "Jiya Patel",
@@ -496,12 +482,12 @@
     "pass_id": "VC6-0035",
     "signature": "DC936AD46EEB",
     "scan_code": "VC6-0035-DC936AD46EEB",
+    "slogan": "Senior ko 'Bhaiya' bolun ya 'Sir', isi confusion me 1 month nikal gaya.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Senior ko 'Bhaiya' bolun ya 'Sir', isi confusion me 1 month nikal gaya."
+    "logs": []
   },
   "VC6-0036": {
     "name": "Bedabrata Taraphdar",
@@ -510,12 +496,12 @@
     "pass_id": "VC6-0036",
     "signature": "5343B5D42302",
     "scan_code": "VC6-0036-5343B5D42302",
+    "slogan": "Outfit 5000 ka liya taaki freshers party me hero wali entry mile.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Outfit 5000 ka liya taaki freshers party me hero wali entry mile."
+    "logs": []
   },
   "VC6-0037": {
     "name": "Devin Laliyawala",
@@ -524,12 +510,12 @@
     "pass_id": "VC6-0037",
     "signature": "83E696C827FC",
     "scan_code": "VC6-0037-83E696C827FC",
+    "slogan": "Abhi tak campus ke saare classroom ke raaste bhi yaad nahi huye.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Abhi tak campus ke saare classroom ke raaste bhi yaad nahi huye."
+    "logs": []
   },
   "VC6-0038": {
     "name": "Aaryan Agrawal",
@@ -538,12 +524,12 @@
     "pass_id": "VC6-0038",
     "signature": "ACD92FCD9978",
     "scan_code": "VC6-0038-ACD92FCD9978",
+    "slogan": "Hostel mess ka pehla bite khate hi ghar ki yaad aa gayi thi.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Hostel mess ka pehla bite khate hi ghar ki yaad aa gayi thi."
+    "logs": []
   },
   "VC6-0039": {
     "name": "Jaineel Vaidya",
@@ -552,12 +538,12 @@
     "pass_id": "VC6-0039",
     "signature": "97C1DA18F056",
     "scan_code": "VC6-0039-97C1DA18F056",
+    "slogan": "8 AM lecture me zinda pahunchna hi hamara sabse bada achievement hai.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "8 AM lecture me zinda pahunchna hi hamara sabse bada achievement hai."
+    "logs": []
   },
   "VC6-0040": {
     "name": "Devanshi A Kawaiya",
@@ -566,12 +552,12 @@
     "pass_id": "VC6-0040",
     "signature": "D01A873FCE3D",
     "scan_code": "VC6-0040-D01A873FCE3D",
+    "slogan": "Intro dene se zyada darr attendance register dekh ke lagta hai.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Intro dene se zyada darr attendance register dekh ke lagta hai."
+    "logs": []
   },
   "VC6-0041": {
     "name": "Nitya Chaudhary",
@@ -580,12 +566,12 @@
     "pass_id": "VC6-0041",
     "signature": "8EAE6BE7A7D0",
     "scan_code": "VC6-0041-8EAE6BE7A7D0",
+    "slogan": "Seniors bole 'Intro do', humne bola 'Pehle party enjoy karne do'.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Seniors bole 'Intro do', humne bola 'Pehle party enjoy karne do'."
+    "logs": []
   },
   "VC6-0042": {
     "name": "Mayank Poriya",
@@ -594,12 +580,12 @@
     "pass_id": "VC6-0042",
     "signature": "D3E6BB6213D1",
     "scan_code": "VC6-0042-D3E6BB6213D1",
+    "slogan": "Class me first bench se last bench ka safar 1 hafte me poora ho gaya.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Class me first bench se last bench ka safar 1 hafte me poora ho gaya."
+    "logs": []
   },
   "VC6-0043": {
     "name": "Siddhangana Bain",
@@ -608,12 +594,12 @@
     "pass_id": "VC6-0043",
     "signature": "F8C064B0DEBB",
     "scan_code": "VC6-0043-F8C064B0DEBB",
+    "slogan": "College aane se pehle socha tha chill hoga, yahan roz lab viva hai.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "College aane se pehle socha tha chill hoga, yahan roz lab viva hai."
+    "logs": []
   },
   "VC6-0044": {
     "name": "Siddhi Khadgi",
@@ -622,12 +608,12 @@
     "pass_id": "VC6-0044",
     "signature": "EBA2DDC63695",
     "scan_code": "VC6-0044-EBA2DDC63695",
+    "slogan": "Freshers party me full swag, kal se phir wahi 75% attendance ka rona.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Freshers party me full swag, kal se phir wahi 75% attendance ka rona."
+    "logs": []
   },
   "VC6-0045": {
     "name": "Mridul Patil",
@@ -636,12 +622,12 @@
     "pass_id": "VC6-0045",
     "signature": "7A10B52361E9",
     "scan_code": "VC6-0045-7A10B52361E9",
+    "slogan": "Dress pe itna kharcha kiya ki agle 2 mahine canteen me udhaar chalega.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Dress pe itna kharcha kiya ki agle 2 mahine canteen me udhaar chalega."
+    "logs": []
   },
   "VC6-0046": {
     "name": "Yash Pratap",
@@ -650,12 +636,12 @@
     "pass_id": "VC6-0046",
     "signature": "83E84399FD0B",
     "scan_code": "VC6-0046-83E84399FD0B",
+    "slogan": "Hostel ke room me pehli baar jhadu lagate waqt rona aa gaya tha.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Hostel ke room me pehli baar jhadu lagate waqt rona aa gaya tha."
+    "logs": []
   },
   "VC6-0047": {
     "name": "Anand Shankar",
@@ -664,12 +650,12 @@
     "pass_id": "VC6-0047",
     "signature": "35C07692D42A",
     "scan_code": "VC6-0047-35C07692D42A",
+    "slogan": "Senior se eye contact bacha ke DJ floor pe aag lagane aaya hoon.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Senior se eye contact bacha ke DJ floor pe aag lagane aaya hoon."
+    "logs": []
   },
   "VC6-0048": {
     "name": "Harsh Joshi",
@@ -678,12 +664,12 @@
     "pass_id": "VC6-0048",
     "signature": "92987DEBD25B",
     "scan_code": "VC6-0048-92987DEBD25B",
+    "slogan": "Abhi tak syllabus ka pehla page bhi nahi khula par party look 10/10.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Abhi tak syllabus ka pehla page bhi nahi khula par party look 10/10."
+    "logs": []
   },
   "VC6-0049": {
     "name": "Shauryasahajpal",
@@ -692,12 +678,12 @@
     "pass_id": "VC6-0049",
     "signature": "C450D8373F16",
     "scan_code": "VC6-0049-C450D8373F16",
+    "slogan": "College fest me aane ka sapna tha, freshers party me VIP ban gaya.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "College fest me aane ka sapna tha, freshers party me VIP ban gaya."
+    "logs": []
   },
   "VC6-0050": {
     "name": "Samridhi Kumari",
@@ -706,12 +692,12 @@
     "pass_id": "VC6-0050",
     "signature": "DF4FB737D336",
     "scan_code": "VC6-0050-DF4FB737D336",
+    "slogan": "Professors ke naam yaad nahi hain par campus ke saare crush yaad hain.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Professors ke naam yaad nahi hain par campus ke saare crush yaad hain."
+    "logs": []
   },
   "VC6-0051": {
     "name": "Nitya Raghuwanshi",
@@ -720,12 +706,12 @@
     "pass_id": "VC6-0051",
     "signature": "7405CA81FAED",
     "scan_code": "VC6-0051-7405CA81FAED",
+    "slogan": "Ghar pe bola tha engineering easy hai, yahan assignment ne rulaya hai.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Ghar pe bola tha engineering easy hai, yahan assignment ne rulaya hai."
+    "logs": []
   },
   "VC6-0052": {
     "name": "Surbhi Kumari",
@@ -734,12 +720,12 @@
     "pass_id": "VC6-0052",
     "signature": "CBE9609E2D0C",
     "scan_code": "VC6-0052-CBE9609E2D0C",
+    "slogan": "Hostel me Maggie bana ke khane wale aaj VIP buffet explore karenge.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Hostel me Maggie bana ke khane wale aaj VIP buffet explore karenge."
+    "logs": []
   },
   "VC6-0053": {
     "name": "Jahnavi Prasad",
@@ -748,12 +734,12 @@
     "pass_id": "VC6-0053",
     "signature": "927604FF8006",
     "scan_code": "VC6-0053-927604FF8006",
+    "slogan": "1st semester me hi samajh aa gaya ki school life kitni achhi thi.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "1st semester me hi samajh aa gaya ki school life kitni achhi thi."
+    "logs": []
   },
   "VC6-0054": {
     "name": "Varad Gupta",
@@ -762,12 +748,12 @@
     "pass_id": "VC6-0054",
     "signature": "C9429422D4D5",
     "scan_code": "VC6-0054-C9429422D4D5",
+    "slogan": "Photographer bhaiya meri single photos lo, DP update karni hai.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Photographer bhaiya meri single photos lo, DP update karni hai."
+    "logs": []
   },
   "VC6-0055": {
     "name": "Akshu Pareek",
@@ -776,12 +762,12 @@
     "pass_id": "VC6-0055",
     "signature": "6FB868EB34B8",
     "scan_code": "VC6-0055-6FB868EB34B8",
+    "slogan": "Naagin dance ka plan nahi tha par DJ wale ne majboor kar diya.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Naagin dance ka plan nahi tha par DJ wale ne majboor kar diya."
+    "logs": []
   },
   "VC6-0056": {
     "name": "Dhatri Chawla",
@@ -790,12 +776,12 @@
     "pass_id": "VC6-0056",
     "signature": "AE23BCA7F5FF",
     "scan_code": "VC6-0056-AE23BCA7F5FF",
+    "slogan": "CR banne ka sapna tha, pehle assignment me hi resign karne ka man hua.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "CR banne ka sapna tha, pehle assignment me hi resign karne ka man hua."
+    "logs": []
   },
   "VC6-0057": {
     "name": "Yug Desai",
@@ -804,12 +790,12 @@
     "pass_id": "VC6-0057",
     "signature": "8A0628ADC3CB",
     "scan_code": "VC6-0057-8A0628ADC3CB",
+    "slogan": "Senior bole 'Koi problem ho toh batana', humne bola 'Attendance dilwa do'.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Senior bole 'Koi problem ho toh batana', humne bola 'Attendance dilwa do'."
+    "logs": []
   },
   "VC6-0058": {
     "name": "Anshu Pareek",
@@ -818,12 +804,12 @@
     "pass_id": "VC6-0058",
     "signature": "B81334449986",
     "scan_code": "VC6-0058-B81334449986",
+    "slogan": "High school se nikle toh laga azaadi mili, yahan submission deadline mil gayi.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "High school se nikle toh laga azaadi mili, yahan submission deadline mil gayi."
+    "logs": []
   },
   "VC6-0059": {
     "name": "Katyayni Sharma",
@@ -832,12 +818,12 @@
     "pass_id": "VC6-0059",
     "signature": "383076CB8340",
     "scan_code": "VC6-0059-383076CB8340",
+    "slogan": "Formal wear me chalna itna mushkil hai jaise coding me bug dhundhna.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Formal wear me chalna itna mushkil hai jaise coding me bug dhundhna."
+    "logs": []
   },
   "VC6-0060": {
     "name": "Ishaan Singh",
@@ -846,12 +832,12 @@
     "pass_id": "VC6-0060",
     "signature": "393366698644",
     "scan_code": "VC6-0060-393366698644",
+    "slogan": "Canteen me pehli baar samosa khate hi realise hua paise bachane honge.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Canteen me pehli baar samosa khate hi realise hua paise bachane honge."
+    "logs": []
   },
   "VC6-0061": {
     "name": "Aashi Srivastava",
@@ -860,12 +846,12 @@
     "pass_id": "VC6-0061",
     "signature": "634B2464A464",
     "scan_code": "VC6-0061-634B2464A464",
+    "slogan": "Instagram stories 50 daalunga, college walon ko pata chalna chahiye.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Instagram stories 50 daalunga, college walon ko pata chalna chahiye."
+    "logs": []
   },
   "VC6-0062": {
     "name": "Riti Patel",
@@ -874,12 +860,12 @@
     "pass_id": "VC6-0062",
     "signature": "8C3C95A9C561",
     "scan_code": "VC6-0062-8C3C95A9C561",
+    "slogan": "Pehla semester hai, party me energy 100% aur marks ki koi chinta nahi.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Pehla semester hai, party me energy 100% aur marks ki koi chinta nahi."
+    "logs": []
   },
   "VC6-0063": {
     "name": "Prerit Kishan",
@@ -888,12 +874,12 @@
     "pass_id": "VC6-0063",
     "signature": "30F1CD9F2FF5",
     "scan_code": "VC6-0063-30F1CD9F2FF5",
+    "slogan": "Hostel me roommates ke saath pehli ladai Maggi ke share par hui thi.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Hostel me roommates ke saath pehli ladai Maggi ke share par hui thi."
+    "logs": []
   },
   "VC6-0064": {
     "name": "Karunya Varma",
@@ -902,12 +888,12 @@
     "pass_id": "VC6-0064",
     "signature": "3CAFAFA8EDC9",
     "scan_code": "VC6-0064-3CAFAFA8EDC9",
+    "slogan": "Sir ne bola tha 'You are the future', par abhi sirf buffet ka future dikh raha hai.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Sir ne bola tha 'You are the future', par abhi sirf buffet ka future dikh raha hai."
+    "logs": []
   },
   "VC6-0065": {
     "name": "Navachaithanya M",
@@ -916,12 +902,12 @@
     "pass_id": "VC6-0065",
     "signature": "00DF2FD0F6A1",
     "scan_code": "VC6-0065-00DF2FD0F6A1",
+    "slogan": "Freshers title mile na mile, best dressed ka confidence poora hai.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Freshers title mile na mile, best dressed ka confidence poora hai."
+    "logs": []
   },
   "VC6-0066": {
     "name": "Prasoon",
@@ -930,12 +916,12 @@
     "pass_id": "VC6-0066",
     "signature": "75ECD30A84AE",
     "scan_code": "VC6-0066-75ECD30A84AE",
+    "slogan": "College group me 500 messages hain par kaam ka ek bhi nahi.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "College group me 500 messages hain par kaam ka ek bhi nahi."
+    "logs": []
   },
   "VC6-0067": {
     "name": "Kemal Sha",
@@ -944,12 +930,12 @@
     "pass_id": "VC6-0067",
     "signature": "8C9564099CAF",
     "scan_code": "VC6-0067-8C9564099CAF",
+    "slogan": "Subah uthne ke 4 alarm bajte hain, fir bhi 8:05 pe daudte huye aate hain.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Subah uthne ke 4 alarm bajte hain, fir bhi 8:05 pe daudte huye aate hain."
+    "logs": []
   },
   "VC6-0068": {
     "name": "Om Kasurkar",
@@ -958,12 +944,12 @@
     "pass_id": "VC6-0068",
     "signature": "831FE1B350CF",
     "scan_code": "VC6-0068-831FE1B350CF",
+    "slogan": "Senior bhaiya se tips lene aaya tha, unhone bola 'Hum khud jugad pe hain'.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Senior bhaiya se tips lene aaya tha, unhone bola 'Hum khud jugad pe hain'."
+    "logs": []
   },
   "VC6-0069": {
     "name": "Pavitra Kapadiya",
@@ -972,12 +958,12 @@
     "pass_id": "VC6-0069",
     "signature": "6FE3E8D561EA",
     "scan_code": "VC6-0069-6FE3E8D561EA",
+    "slogan": "Ghar ke khane ki kadar hostel aane ke 3 din baad samajh aayi.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Ghar ke khane ki kadar hostel aane ke 3 din baad samajh aayi."
+    "logs": []
   },
   "VC6-0070": {
     "name": "Arsh ArpitKumar Chav",
@@ -986,12 +972,12 @@
     "pass_id": "VC6-0070",
     "signature": "DC5DAFEAADA6",
     "scan_code": "VC6-0070-DC5DAFEAADA6",
+    "slogan": "Nayi notebooks khareedi thi sundar banayenge, ab rough book ban chuki hai.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Nayi notebooks khareedi thi sundar banayenge, ab rough book ban chuki hai."
+    "logs": []
   },
   "VC6-0071": {
     "name": "Patil Vaibhav",
@@ -1000,12 +986,12 @@
     "pass_id": "VC6-0071",
     "signature": "2B2B314EDDF4",
     "scan_code": "VC6-0071-2B2B314EDDF4",
+    "slogan": "Party me no shy mode, freshers hain toh full dhamaka banta hai!",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Party me no shy mode, freshers hain toh full dhamaka banta hai!"
+    "logs": []
   },
   "VC6-0072": {
     "name": "Maitreyi Sharma",
@@ -1014,12 +1000,12 @@
     "pass_id": "VC6-0072",
     "signature": "52AAD6A4F07F",
     "scan_code": "VC6-0072-52AAD6A4F07F",
+    "slogan": "Orientation me socha tha top karenge, ab bas pass hona goal hai.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Orientation me socha tha top karenge, ab bas pass hona goal hai."
+    "logs": []
   },
   "VC6-0073": {
     "name": "PULKIT UPADHYAY",
@@ -1028,12 +1014,12 @@
     "pass_id": "VC6-0073",
     "signature": "8BC4B1A998DA",
     "scan_code": "VC6-0073-8BC4B1A998DA",
+    "slogan": "Selfie angle test karne me hi aadha ghanta nikal gaya!",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Selfie angle test karne me hi aadha ghanta nikal gaya!"
+    "logs": []
   },
   "VC6-0074": {
     "name": "Ajad",
@@ -1042,12 +1028,12 @@
     "pass_id": "VC6-0074",
     "signature": "C352CBDEFA44",
     "scan_code": "VC6-0074-C352CBDEFA44",
+    "slogan": "Mess wale uncle ko laga hum chup rahenge, hum freshers party me aagaye.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Mess wale uncle ko laga hum chup rahenge, hum freshers party me aagaye."
+    "logs": []
   },
   "VC6-0075": {
     "name": "Deepak Kumar",
@@ -1056,12 +1042,12 @@
     "pass_id": "VC6-0075",
     "signature": "01BB748A20AE",
     "scan_code": "VC6-0075-01BB748A20AE",
+    "slogan": "Bhai blazer me pocket kahan hai, mobile rakhne me struggle ho raha hai.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Bhai blazer me pocket kahan hai, mobile rakhne me struggle ho raha hai."
+    "logs": []
   },
   "VC6-0076": {
     "name": "Lakshay",
@@ -1070,12 +1056,12 @@
     "pass_id": "VC6-0076",
     "signature": "D02C12ABA32E",
     "scan_code": "VC6-0076-D02C12ABA32E",
+    "slogan": "Attendance policy sun ke pehli baar dil me thoda dard hua tha.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Attendance policy sun ke pehli baar dil me thoda dard hua tha."
+    "logs": []
   },
   "VC6-0077": {
     "name": "Pankaj Kumar Ranwa",
@@ -1084,12 +1070,12 @@
     "pass_id": "VC6-0077",
     "signature": "2317E31D65DA",
     "scan_code": "VC6-0077-2317E31D65DA",
+    "slogan": "1st Year ka swag: Har nayi cheez pe over-excited hona!",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "1st Year ka swag: Har nayi cheez pe over-excited hona!"
+    "logs": []
   },
   "VC6-0078": {
     "name": "Madhav Patidar",
@@ -1098,12 +1084,12 @@
     "pass_id": "VC6-0078",
     "signature": "536267EC18C6",
     "scan_code": "VC6-0078-536267EC18C6",
+    "slogan": "Hostel ke bathroom ki line se bachke party me time pe pahunch gaya.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Hostel ke bathroom ki line se bachke party me time pe pahunch gaya."
+    "logs": []
   },
   "VC6-0079": {
     "name": "Pratyush",
@@ -1112,12 +1098,12 @@
     "pass_id": "VC6-0079",
     "signature": "2094C81F18BB",
     "scan_code": "VC6-0079-2094C81F18BB",
+    "slogan": "College crush ko party me dekha, ab agle 4 saal motivation set hai.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "College crush ko party me dekha, ab agle 4 saal motivation set hai."
+    "logs": []
   },
   "VC6-0080": {
     "name": "Vamsi",
@@ -1126,12 +1112,12 @@
     "pass_id": "VC6-0080",
     "signature": "DC4E66B82791",
     "scan_code": "VC6-0080-DC4E66B82791",
+    "slogan": "Library me AC ke liye baithe the, padhai ka koi lena dena nahi tha.",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Library me AC ke liye baithe the, padhai ka koi lena dena nahi tha."
+    "logs": []
   },
   "VC6-0081": {
     "name": "Saurabh Kumar",
@@ -1140,12 +1126,12 @@
     "pass_id": "VC6-0081",
     "signature": "7778B4548D03",
     "scan_code": "VC6-0081-7778B4548D03",
+    "slogan": "Freshers party me aake laga ab officially college life shuru ho gayi!",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Freshers party me aake laga ab officially college life shuru ho gayi!"
+    "logs": []
   },
   "VC6-0082": {
     "name": "Adarsh Pratap Singh",
@@ -1154,11 +1140,11 @@
     "pass_id": "VC6-0082",
     "signature": "B1D403304A05",
     "scan_code": "VC6-0082-B1D403304A05",
+    "slogan": "Duniya chahe idhar ki udhar ho jaye, aaj ki raat full enjoy karenge!",
     "starter_served": false,
     "starter_time": null,
     "main_served": false,
     "main_time": null,
-    "logs": [],
-    "slogan": "Duniya chahe idhar ki udhar ho jaye, aaj ki raat full enjoy karenge!"
+    "logs": []
   }
 }
