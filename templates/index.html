@@ -744,7 +744,7 @@
       startCamera();
     }
 
-    // 3. Camera Frame OCR Loop
+    // 3. Real-time Middle Circle Medallion Scanning Loop
     function startCameraScanningLoop() {
       const video = document.getElementById('camera-feed');
       const canvas = document.getElementById('ocr-canvas');
@@ -756,29 +756,43 @@
 
         try {
           canvas.width = 480;
-          canvas.height = 360;
-          ctx.drawImage(video, 0, 0, 480, 360);
+          canvas.height = 480;
+          ctx.drawImage(video, 0, 0, 480, 480);
+          const frameB64 = canvas.toDataURL('image/jpeg', 0.85);
 
-          let recognizedText = '';
-          if (ocrWorker) {
-            const ret = await ocrWorker.recognize(canvas);
-            recognizedText = (ret.data && ret.data.text) || '';
-          } else {
-            const ret = await Tesseract.recognize(canvas, 'eng', { logger: () => {} });
-            recognizedText = (ret.data && ret.data.text) || '';
-          }
+          // 1. Scan Middle Medallion Visually via CV Engine
+          const res = await fetch('/api/scan_medallion', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ image: frameB64 })
+          });
 
-          if (recognizedText) {
-            const matched = findStudentFromText(recognizedText);
-            if (matched) {
-              await claimMeal(matched.scan_code || matched.pass_id);
-            }
+          if (res.ok) {
+            const data = await res.json();
+            showBanner(data);
+            loadAttendees();
+            loadStats();
+            loadActivity();
+            triggerScanCooldown();
           }
         } catch (err) {
         } finally {
           isProcessing = false;
         }
-      }, 700);
+      }, 400);
+    }
+
+    function triggerScanCooldown() {
+      scanCooldown = true;
+      if (navigator.vibrate) navigator.vibrate(150);
+      document.getElementById('live-status-text').innerHTML =
+        '<span style="color:var(--cyan);font-weight:700;">Sonic Medallion Authenticated!</span>';
+      setTimeout(() => {
+        scanCooldown = false;
+        if (activeStream) {
+          document.getElementById('live-status-text').innerHTML = 'Camera Active — Hold pass inside radar';
+        }
+      }, 2400);
     }
 
     // 4. File Upload & Direct Pass Scan
@@ -791,62 +805,31 @@
       const file = input.files[0];
       const statusText = document.getElementById('live-status-text');
 
-      statusText.innerHTML = "<span class='logo-pulse'></span> Scanning pass image...";
+      statusText.innerHTML = "<span class='logo-pulse'></span> Scanning Middle Circle Medallion...";
 
-      // 1. Filename match
-      const fname = file.name;
-      const cleanName = fname.split('.')[0].toUpperCase();
-      const pMatch = cleanName.match(/VC6\s*-?\s*0*([1-9][0-9]?)/);
-      let directMatch = null;
-      if (pMatch) {
-        const num = String(pMatch[1]).padStart(4, '0');
-        directMatch = attendeesDB.find(x => x.pass_id === 'VC6-' + num);
-      } else {
-        directMatch = attendeesDB.find(x => x.pass_id === cleanName);
-      }
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const imageB64 = e.target.result;
+        try {
+          const res = await fetch('/api/scan_medallion', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ image: imageB64, filename: file.name })
+          });
 
-      if (directMatch) {
-        await claimMeal(directMatch.scan_code || directMatch.pass_id);
-        input.value = '';
-        return;
-      }
-
-      // 2. Client-side OCR
-      try {
-        let txt = '';
-        if (ocrWorker) {
-          const res = await ocrWorker.recognize(file);
-          txt = (res.data.text || '').trim();
-        } else {
-          const res = await Tesseract.recognize(file, 'eng', { logger: () => {} });
-          txt = (res.data.text || '').trim();
+          const data = await res.json();
+          showBanner(data);
+          loadStats();
+          loadActivity();
+          loadAttendees();
+          if (res.ok) triggerScanCooldown();
+        } catch (err) {
+          showBanner({ status: 'ERROR', badge_color: 'red', title: 'Scan Error', message: 'Could not connect to server.' });
+        } finally {
+          input.value = '';
         }
-
-        if (txt) {
-          const matched = findStudentFromText(txt);
-          if (matched) {
-            await claimMeal(matched.scan_code || matched.pass_id);
-            input.value = '';
-            return;
-          }
-        }
-
-        // 3. Backend Fallback Match
-        const serverRes = await fetch('/api/scan_image', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: txt, filename: file.name })
-        });
-        const serverData = await serverRes.json();
-        showBanner(serverData);
-        loadStats();
-        loadActivity();
-        loadAttendees();
-      } catch (e) {
-        showBanner({ status: 'ERROR', badge_color: 'red', title: 'Upload Scan Error', message: 'Could not recognize pass. Please select attendee from the quick list below.' });
-      } finally {
-        input.value = '';
-      }
+      };
+      reader.readAsDataURL(file);
     }
 
     // 5. Intelligent Multi-Tier Matcher

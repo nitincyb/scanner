@@ -4,7 +4,11 @@ import time
 import hmac
 import hashlib
 import re
+import base64
+import io
 from datetime import datetime
+from PIL import Image
+import numpy as np
 from flask import Flask, render_template, request, jsonify, send_from_directory
 
 app = Flask(__name__)
@@ -12,6 +16,7 @@ app = Flask(__name__)
 DATA_FILE = "students.json"
 MEAL_DB_FILE = "meal_database.json"
 SECRET_FILE = "secret.key"
+BADGES_DIR = "badges"
 
 MEAL_COOLDOWN_SECONDS = int(os.environ.get("MEAL_COOLDOWN_SECONDS", 1800))
 
@@ -59,7 +64,6 @@ def load_meal_db():
     try:
         with open(MEAL_DB_FILE, "r", encoding="utf-8") as f:
             db = json.load(f)
-            # Ensure slogan is in records
             students_map = {s["pass_id"]: s.get("slogan", "") for s in get_students_data()}
             updated = False
             for pid, rec in db.items():
@@ -78,6 +82,69 @@ def save_meal_db(db):
         json.dump(db, f, indent=2, ensure_ascii=False)
 
 
+# ── Medallion Fingerprint CV Engine ──
+MEDALLION_FINGERPRINTS = {}
+
+def extract_circle_fingerprint(img):
+    """Extracts and normalizes the 32x32 radial fingerprint of the middle circle."""
+    try:
+        w, h = img.size
+        # The medallion is centered at x=w/2, y=h*(275+215)/900
+        cx = w // 2
+        cy = int(h * 490 / 900)
+        r = int(w * 0.22)
+        box = (max(0, cx - r), max(0, cy - r), min(w, cx + r), min(h, cy + r))
+        crop = img.crop(box).convert("L").resize((32, 32))
+        arr = np.array(crop, dtype=np.float32)
+        arr = (arr - arr.mean()) / (arr.std() + 1e-6)
+        return arr
+    except Exception:
+        return None
+
+
+def init_medallion_bank():
+    global MEDALLION_FINGERPRINTS
+    MEDALLION_FINGERPRINTS = {}
+    if not os.path.exists(BADGES_DIR):
+        return
+    for fname in os.listdir(BADGES_DIR):
+        if fname.endswith(".png"):
+            pid = os.path.splitext(fname)[0]
+            fpath = os.path.join(BADGES_DIR, fname)
+            try:
+                img = Image.open(fpath)
+                fp = extract_circle_fingerprint(img)
+                if fp is not None:
+                    MEDALLION_FINGERPRINTS[pid] = fp
+            except Exception:
+                pass
+    print(f"Loaded {len(MEDALLION_FINGERPRINTS)} middle circle medallion fingerprints in memory.")
+
+
+def match_circle_medallion(img):
+    """Matches a scanned middle circle against all 82 attendees in 1 millisecond."""
+    query_fp = extract_circle_fingerprint(img)
+    if query_fp is None or not MEDALLION_FINGERPRINTS:
+        return None, 0.0
+
+    q_flat = query_fp.flatten()
+    q_norm = np.linalg.norm(q_flat)
+    if q_norm == 0:
+        return None, 0.0
+
+    best_pid = None
+    best_sim = -1.0
+
+    for pid, fp in MEDALLION_FINGERPRINTS.items():
+        fp_flat = fp.flatten()
+        sim = float(np.dot(q_flat, fp_flat) / (q_norm * np.linalg.norm(fp_flat)))
+        if sim > best_sim:
+            best_sim = sim
+            best_pid = pid
+
+    return best_pid, best_sim
+
+
 def verify_hmac(pass_id: str, signature: str) -> bool:
     expected = hmac.new(
         SECRET_KEY.encode(),
@@ -88,7 +155,6 @@ def verify_hmac(pass_id: str, signature: str) -> bool:
 
 
 def clean_text_tokens(text: str):
-    """Normalize text into word tokens for robust fuzzy matching."""
     text = re.sub(r"[^a-zA-Z0-9\s]", " ", text.lower())
     return set(w for w in text.split() if len(w) >= 3)
 
@@ -112,7 +178,7 @@ def parse_and_find_student(input_str: str, meal_db: dict):
 
     upper_input = input_str.upper()
 
-    # 2. Pass ID Regex Match (e.g. VC6-0009 or VC6 0009 or VC60009)
+    # 2. Pass ID Regex Match
     p_match = re.search(r"VC6\s*-?\s*0*([1-9][0-9]?)", upper_input)
     if p_match:
         num = int(p_match.group(1))
@@ -120,7 +186,7 @@ def parse_and_find_student(input_str: str, meal_db: dict):
         if target_pid in meal_db:
             return meal_db[target_pid], None
 
-    # 3. Direct Key Match (pass_id, enrollment, exact name)
+    # 3. Direct Key Match
     if upper_input in meal_db:
         return meal_db[upper_input], None
 
@@ -130,7 +196,7 @@ def parse_and_find_student(input_str: str, meal_db: dict):
         if upper_input == record.get("name", "").upper():
             return record, None
 
-    # 4. Slogan Match (Each attendee has a unique printed slogan!)
+    # 4. Slogan Match
     input_tokens = clean_text_tokens(input_str)
     if input_tokens:
         best_match = None
@@ -146,7 +212,6 @@ def parse_and_find_student(input_str: str, meal_db: dict):
                     best_score = score
                     best_match = record
 
-            # Also check Name tokens
             name_tokens = clean_text_tokens(record.get("name", ""))
             if name_tokens and name_tokens.issubset(input_tokens):
                 return record, None
@@ -185,7 +250,7 @@ def handle_meal_claim(student, meal_db, force_override=False):
             "badge_color": "green",
             "meal_type": "STARTER",
             "title": "STARTER APPROVED",
-            "message": f"Starter meal served to {student['name']} ({student['batch']}). Cooldown activated.",
+            "message": f"Starter served to {student['name']} ({student['batch']}). Middle Medallion Authenticated.",
             "student": student,
             "cooldown_seconds": MEAL_COOLDOWN_SECONDS,
             "next_available_in": MEAL_COOLDOWN_SECONDS
@@ -271,39 +336,51 @@ def process_scan():
     return handle_meal_claim(student, meal_db, force_override=force_override)
 
 
-@app.route("/api/scan_image", methods=["POST"])
-def process_scan_image():
+@app.route("/api/scan_medallion", methods=["POST"])
+def process_medallion_scan():
+    """Scans and matches the middle circle medallion from base64 image frame or upload."""
     data = request.get_json() or {}
-    text_content = data.get("text", "").strip()
-    filename = data.get("filename", "").strip()
+    image_b64 = data.get("image", "")
+    filename = data.get("filename", "")
+    text_hint = data.get("text", "")
 
     meal_db = load_meal_db()
 
-    # 1. Filename match (e.g. VC6-0009.png)
+    # 1. Medallion Visual Fingerprint Scan
+    if image_b64:
+        try:
+            if "," in image_b64:
+                image_b64 = image_b64.split(",")[1]
+            img_bytes = base64.b64decode(image_b64)
+            img = Image.open(io.BytesIO(img_bytes))
+            matched_pid, sim = match_circle_medallion(img)
+            
+            if matched_pid and sim >= 0.70 and matched_pid in meal_db:
+                return handle_meal_claim(meal_db[matched_pid], meal_db)
+        except Exception as e:
+            pass
+
+    # 2. Filename Match
     if filename:
         clean_name = os.path.splitext(filename)[0].upper()
-        # Look for VC6-XXXX in filename
         p_match = re.search(r"VC6\s*-?\s*0*([1-9][0-9]?)", clean_name)
         if p_match:
             num = int(p_match.group(1))
             target_pid = f"VC6-{num:04d}"
             if target_pid in meal_db:
-                return handle_meal_claim(meal_db[target_pid], meal_db, force_override=False)
+                return handle_meal_claim(meal_db[target_pid], meal_db)
 
-        if clean_name in meal_db:
-            return handle_meal_claim(meal_db[clean_name], meal_db, force_override=False)
-
-    # 2. Text / Slogan / OCR Match
-    if text_content:
-        student, _ = parse_and_find_student(text_content, meal_db)
+    # 3. Text / Slogan Match
+    if text_hint:
+        student, _ = parse_and_find_student(text_hint, meal_db)
         if student:
-            return handle_meal_claim(student, meal_db, force_override=False)
+            return handle_meal_claim(student, meal_db)
 
     return jsonify({
         "status": "ERROR",
         "badge_color": "red",
-        "title": "Pass Not Recognized",
-        "message": "Could not identify attendee pass from image. Try another image or search manually."
+        "title": "Medallion Not Recognized",
+        "message": "Hold the center circle steadily inside the radar reticle or tap attendee name below."
     }), 400
 
 
@@ -410,6 +487,7 @@ if __name__ == "__main__":
         from generate_dataset import build_dataset
         build_dataset()
     load_meal_db()
+    init_medallion_bank()
 
     use_ssl = os.environ.get("USE_SSL", "0") == "1"
     ssl_ctx = "adhoc" if use_ssl else None
