@@ -121,16 +121,23 @@
     "slogan": "Ek saal me hostel mess ne itna dard diya ki ab party me sukoon mila.",
     "starter_served": true,
     "starter_time": 1788164760.6990898,
-    "main_served": false,
-    "main_time": null,
+    "main_served": true,
+    "main_time": 1788170433.6889565,
     "logs": [
       {
         "meal": "STARTER",
         "time": "2026-08-31 13:56:00",
         "epoch": 1788164760.6990898
+      },
+      {
+        "meal": "MAIN_COURSE",
+        "time": "2026-08-31 15:30:33",
+        "epoch": 1788170433.6889565,
+        "forced": false
       }
     ],
-    "starter_time_str": "2026-08-31 13:56:00"
+    "starter_time_str": "2026-08-31 13:56:00",
+    "main_time_str": "2026-08-31 15:30:33"
   },
   "VC6-0010": {
     "name": "Mukund Kundan",
@@ -1108,16 +1115,23 @@
     "slogan": "College crush ko party me dekha, ab agle 4 saal motivation set hai.",
     "starter_served": true,
     "starter_time": 1788164760.7088127,
-    "main_served": false,
-    "main_time": null,
+    "main_served": true,
+    "main_time": 1788170433.7436404,
     "logs": [
       {
         "meal": "STARTER",
         "time": "2026-08-31 13:56:00",
         "epoch": 1788164760.7088127
+      },
+      {
+        "meal": "MAIN_COURSE",
+        "time": "2026-08-31 15:30:33",
+        "epoch": 1788170433.7436404,
+        "forced": false
       }
     ],
-    "starter_time_str": "2026-08-31 13:56:00"
+    "starter_time_str": "2026-08-31 13:56:00",
+    "main_time_str": "2026-08-31 15:30:33"
   },
   "VC6-0080": {
     "name": "Vamsi",

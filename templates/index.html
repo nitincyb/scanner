@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Ultra-Fast 60FPS In-Browser Cyber QR Decoder (jsQR) -->
+  <!-- jsQR for QR fallback -->
   <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 
   <style>
@@ -176,12 +176,12 @@
     /* Cyber Circular Radar Reticle */
     .target-radar {
       position: absolute;
-      width: 68%;
-      max-width: 270px;
+      width: 65%;
+      max-width: 250px;
       aspect-ratio: 1;
       border-radius: 50%;
-      border: 2px dashed rgba(0, 229, 255, 0.85);
-      box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45), 0 0 18px var(--cyan);
+      border: 3px dashed rgba(0, 229, 255, 0.9);
+      box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45), 0 0 20px var(--cyan);
       pointer-events: none;
       animation: radarRotate 12s linear infinite;
     }
@@ -191,30 +191,30 @@
     .target-inner-ring {
       position: absolute;
       width: 36%;
-      max-width: 140px;
+      max-width: 135px;
       aspect-ratio: 1;
       border-radius: 50%;
-      border: 2px solid rgba(255, 0, 127, 0.7);
-      box-shadow: 0 0 12px var(--pink);
+      border: 2px solid rgba(255, 0, 127, 0.8);
+      box-shadow: 0 0 14px var(--pink);
       pointer-events: none;
     }
 
     /* Scanning Laser */
     .scan-laser {
       position: absolute;
-      left: 10%;
-      width: 80%;
+      left: 15%;
+      width: 70%;
       height: 2px;
       background: linear-gradient(90deg, transparent, var(--cyan), var(--pink), transparent);
-      box-shadow: 0 0 12px var(--cyan);
-      animation: sweepLaser 2s infinite ease-in-out;
+      box-shadow: 0 0 14px var(--cyan);
+      animation: sweepLaser 1.8s infinite ease-in-out;
       pointer-events: none;
     }
 
     @keyframes sweepLaser {
-      0% { top: 20%; opacity: 0.3; }
-      50% { top: 80%; opacity: 1; }
-      100% { top: 20%; opacity: 0.3; }
+      0% { top: 25%; opacity: 0.3; }
+      50% { top: 75%; opacity: 1; }
+      100% { top: 25%; opacity: 0.3; }
     }
 
     .reticle-label {
@@ -224,9 +224,9 @@
       transform: translateX(-50%);
       background: rgba(11, 15, 25, 0.92);
       color: var(--cyan);
-      font-size: 0.72rem;
+      font-size: 0.75rem;
       font-weight: 800;
-      padding: 5px 14px;
+      padding: 6px 16px;
       border-radius: 20px;
       letter-spacing: 0.6px;
       white-space: nowrap;
@@ -245,6 +245,21 @@
       border-radius: 8px;
       font-size: 0.72rem;
       font-weight: 600;
+      cursor: pointer;
+      z-index: 20;
+    }
+
+    .snap-btn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(0, 229, 255, 0.2);
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
       cursor: pointer;
       z-index: 20;
     }
@@ -305,7 +320,7 @@
 
     .banner-title {
       font-family: 'Outfit', sans-serif;
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 800;
       margin-bottom: 4px;
       display: flex;
@@ -313,7 +328,7 @@
       gap: 8px;
     }
 
-    .banner-desc { font-size: 0.85rem; color: var(--text); line-height: 1.4; }
+    .banner-desc { font-size: 0.88rem; color: var(--text); line-height: 1.4; }
 
     /* ── Instant Attendee Search / Quick Claim List ── */
     .quick-claim-card {
@@ -539,7 +554,8 @@
           <div class="target-radar"></div>
           <div class="target-inner-ring"></div>
           <div class="scan-laser"></div>
-          <div class="reticle-label">GTA VI CYBER MATRIX TARGET</div>
+          <div class="reticle-label">ALIGN CENTER CIRCLE HERE</div>
+          <button class="snap-btn" onclick="captureAndScanImmediate()">⚡ Scan Now</button>
           <button class="flip-btn" onclick="switchCamera()">🔄 Flip Cam</button>
         </div>
       </div>
@@ -554,7 +570,7 @@
           type="text" 
           id="instant-search" 
           class="search-input" 
-          placeholder="🔍 Type Name, Pass ID (e.g. Nitin, 0009, Pratyush) or Slogan word..." 
+          placeholder="🔍 Type Name, Pass ID (e.g. Nitin, 09, Pratyush) or Slogan word..." 
           oninput="filterAttendees(this.value)"
         >
         <div class="attendee-list" id="attendee-list">
@@ -614,14 +630,15 @@
   </main>
 
   <canvas id="qr-canvas" style="display:none;"></canvas>
+  <canvas id="crop-canvas" width="128" height="128" style="display:none;"></canvas>
 
   <script>
     let activeStream = null;
     let currentFacingMode = 'environment';
     let attendeesDB = [];
-    let isProcessing = false;
+    let isScanningServer = false;
     let scanCooldown = false;
-    let animFrameId = null;
+    let lastScanTime = 0;
 
     // ── Load Attendees ──
     async function loadAttendees() {
@@ -731,7 +748,7 @@
         requestAnimationFrame(tickScanLoop);
       } catch (err) {
         document.getElementById('live-status-text').innerHTML =
-          '<span style="color:var(--orange);">Camera unavailable — Use "Upload Pass Image" or Instant Search below</span>';
+          '<span style="color:var(--orange);">Camera preview not available — Use "Upload Pass Image" or Instant Search below</span>';
       }
     }
 
@@ -740,40 +757,116 @@
       startCamera();
     }
 
-    // ── Ultra-Fast 60FPS In-Browser Cyber QR Decoder (0ms latency) ──
+    // ── Real-Time Camera Scan Loop (Dual Engine: Client QR + 0.2ms Server Medallion Matcher) ──
     function tickScanLoop() {
       const video = document.getElementById('camera-feed');
-      const canvas = document.getElementById('qr-canvas');
+      const now = Date.now();
 
       if (video.readyState === video.HAVE_ENOUGH_DATA && !scanCooldown) {
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const vw = video.videoWidth;
+        const vh = video.videoHeight;
         
-        // 1. Instant 60 FPS Client-Side Decode via jsQR
-        if (typeof jsQR !== 'undefined') {
-          const code = jsQR(imageData.data, imageData.width, imageData.height, {
-            inversionAttempts: 'both'
-          });
+        // 1. Check jsQR fallback
+        const canvas = document.getElementById('qr-canvas');
+        canvas.width = vw;
+        canvas.height = vh;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, vw, vh);
 
+        if (typeof jsQR !== 'undefined') {
+          const imgData = ctx.getImageData(0, 0, vw, vh);
+          const code = jsQR(imgData.data, imgData.width, imgData.height, { inversionAttempts: 'both' });
           if (code && code.data && code.data.startsWith('VC6-')) {
-            console.log('Instant 60FPS Cyber Lock:', code.data);
             claimMeal(code.data);
+            requestAnimationFrame(tickScanLoop);
+            return;
           }
+        }
+
+        // 2. Continuous Color & Number Medallion Scanner (Every 280ms)
+        if (!isScanningServer && (now - lastScanTime > 280)) {
+          lastScanTime = now;
+          scanCenterFrame(video, vw, vh);
         }
       }
 
-      animFrameId = requestAnimationFrame(tickScanLoop);
+      requestAnimationFrame(tickScanLoop);
+    }
+
+    async function scanCenterFrame(video, vw, vh) {
+      if (isScanningServer || scanCooldown) return;
+      isScanningServer = true;
+
+      try {
+        const cropCanvas = document.getElementById('crop-canvas');
+        const cropCtx = cropCanvas.getContext('2d');
+
+        // Extract center reticle square (e.g. 60% of min dimension)
+        const size = Math.min(vw, vh) * 0.65;
+        const sx = (vw - size) / 2;
+        const sy = (vh - size) / 2;
+
+        cropCtx.drawImage(video, sx, sy, size, size, 0, 0, 128, 128);
+        const b64 = cropCanvas.toDataURL('image/jpeg', 0.85);
+
+        const res = await fetch('/api/scan_medallion', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ image: b64 })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          showBanner(data);
+          loadStats();
+          loadActivity();
+          loadAttendees();
+          triggerScanCooldown();
+        }
+      } catch (e) {
+        // Continue loop silently
+      } finally {
+        isScanningServer = false;
+      }
+    }
+
+    async function captureAndScanImmediate() {
+      const video = document.getElementById('camera-feed');
+      if (video.readyState !== video.HAVE_ENOUGH_DATA) return;
+      
+      const vw = video.videoWidth;
+      const vh = video.videoHeight;
+      const canvas = document.getElementById('qr-canvas');
+      canvas.width = vw;
+      canvas.height = vh;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0, vw, vh);
+      
+      const b64 = canvas.toDataURL('image/jpeg', 0.9);
+      document.getElementById('live-status-text').innerHTML = "<span class='logo-pulse'></span> Scanning Full Frame...";
+
+      try {
+        const res = await fetch('/api/scan_medallion', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ image: b64 })
+        });
+        const data = await res.json();
+        showBanner(data);
+        loadStats();
+        loadActivity();
+        loadAttendees();
+        if (res.ok) triggerScanCooldown();
+      } catch (err) {
+        showBanner({ status: 'ERROR', badge_color: 'red', title: 'Scan Error', message: 'Could not connect to server.' });
+      }
     }
 
     function triggerScanCooldown() {
       scanCooldown = true;
-      if (navigator.vibrate) navigator.vibrate([80, 50, 80]);
+      if (navigator.vibrate) navigator.vibrate([100, 60, 100]);
       document.getElementById('live-status-text').innerHTML =
-        '<span style="color:var(--cyan);font-weight:700;">✓ Center Medallion Authenticated!</span>';
+        '<span style="color:var(--green);font-weight:700;">✓ VIP Medallion Authenticated!</span>';
       setTimeout(() => {
         scanCooldown = false;
         if (activeStream) {
@@ -792,50 +885,27 @@
       const file = input.files[0];
       const statusText = document.getElementById('live-status-text');
 
-      statusText.innerHTML = "<span class='logo-pulse'></span> Scanning Center Medallion...";
+      statusText.innerHTML = "<span class='logo-pulse'></span> Scanning Medallion...";
 
       const reader = new FileReader();
       reader.onload = async (e) => {
         const imageB64 = e.target.result;
         
-        // Try decoding directly in browser first
-        const img = new Image();
-        img.onload = async () => {
-          const canvas = document.getElementById('qr-canvas');
-          canvas.width = img.width;
-          canvas.height = img.height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0);
-          const imgData = ctx.getImageData(0, 0, img.width, img.height);
-          
-          let decodedCode = null;
-          if (typeof jsQR !== 'undefined') {
-            const qrResult = jsQR(imgData.data, imgData.width, imgData.height, { inversionAttempts: 'both' });
-            if (qrResult && qrResult.data) decodedCode = qrResult.data;
-          }
-
-          if (decodedCode) {
-            claimMeal(decodedCode);
-          } else {
-            // Send to server fallback
-            try {
-              const res = await fetch('/api/scan_medallion', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ image: imageB64, filename: file.name })
-              });
-              const data = await res.json();
-              showBanner(data);
-              loadStats();
-              loadActivity();
-              loadAttendees();
-              if (res.ok) triggerScanCooldown();
-            } catch (err) {
-              showBanner({ status: 'ERROR', badge_color: 'red', title: 'Scan Error', message: 'Could not connect to server.' });
-            }
-          }
-        };
-        img.src = imageB64;
+        try {
+          const res = await fetch('/api/scan_medallion', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ image: imageB64, filename: file.name })
+          });
+          const data = await res.json();
+          showBanner(data);
+          loadStats();
+          loadActivity();
+          loadAttendees();
+          if (res.ok) triggerScanCooldown();
+        } catch (err) {
+          showBanner({ status: 'ERROR', badge_color: 'red', title: 'Scan Error', message: 'Could not connect to server.' });
+        }
       };
       reader.readAsDataURL(file);
       input.value = '';
