@@ -1,0 +1,658 @@
+[
+  {
+    "name": "R GEET NAG SARDHAK",
+    "enrollment": "25003111016031016",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0001",
+    "signature": "2C1E07E123F1",
+    "scan_code": "VC6-0001-2C1E07E123F1"
+  },
+  {
+    "name": "Himanshu Singh",
+    "enrollment": "25003111016031021",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0002",
+    "signature": "8E88D2D0EC51",
+    "scan_code": "VC6-0002-8E88D2D0EC51"
+  },
+  {
+    "name": "Kapileshwar Gonewad",
+    "enrollment": "25003111016031024",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0003",
+    "signature": "BA69AAFD1171",
+    "scan_code": "VC6-0003-BA69AAFD1171"
+  },
+  {
+    "name": "Riyan Rajak",
+    "enrollment": "25003111016031040",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0004",
+    "signature": "F88BAC6E15FE",
+    "scan_code": "VC6-0004-F88BAC6E15FE"
+  },
+  {
+    "name": "Harshit",
+    "enrollment": "25003111016031020",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0005",
+    "signature": "08D80AA7D08E",
+    "scan_code": "VC6-0005-08D80AA7D08E"
+  },
+  {
+    "name": "Hariom Singh",
+    "enrollment": "25003111016031017",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0006",
+    "signature": "49E24414A6C8",
+    "scan_code": "VC6-0006-49E24414A6C8"
+  },
+  {
+    "name": "Mohammad Irfan",
+    "enrollment": "25003111016031027",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0007",
+    "signature": "5F4534A95AAD",
+    "scan_code": "VC6-0007-5F4534A95AAD"
+  },
+  {
+    "name": "Hrishika Singh",
+    "enrollment": "25003111016031064",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0008",
+    "signature": "0A75F41EEAFC",
+    "scan_code": "VC6-0008-0A75F41EEAFC"
+  },
+  {
+    "name": "Nitin Mali",
+    "enrollment": "25003111016031060",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0009",
+    "signature": "53088E35666B",
+    "scan_code": "VC6-0009-53088E35666B"
+  },
+  {
+    "name": "Mukund Kundan",
+    "enrollment": "25003111016031028",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0010",
+    "signature": "4F0E262C1DEA",
+    "scan_code": "VC6-0010-4F0E262C1DEA"
+  },
+  {
+    "name": "Bhumika Bharti",
+    "enrollment": "25003111016031058",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0011",
+    "signature": "C041F93FBE36",
+    "scan_code": "VC6-0011-C041F93FBE36"
+  },
+  {
+    "name": "Chandrima Majumdar",
+    "enrollment": "25003111016031010",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0012",
+    "signature": "A944033E81C5",
+    "scan_code": "VC6-0012-A944033E81C5"
+  },
+  {
+    "name": "Shivanshu",
+    "enrollment": "25003111016031048",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0013",
+    "signature": "06E34488F14A",
+    "scan_code": "VC6-0013-06E34488F14A"
+  },
+  {
+    "name": "Rixika Agarwal",
+    "enrollment": "25003111016031039",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0014",
+    "signature": "BDE42A6A10F5",
+    "scan_code": "VC6-0014-BDE42A6A10F5"
+  },
+  {
+    "name": "Swini Singh",
+    "enrollment": "25003111016031053",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0015",
+    "signature": "0A121E12F119",
+    "scan_code": "VC6-0015-0A121E12F119"
+  },
+  {
+    "name": "Sidhant Raj",
+    "enrollment": "25003111016031051",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0016",
+    "signature": "5214B7B0A057",
+    "scan_code": "VC6-0016-5214B7B0A057"
+  },
+  {
+    "name": "Aman Dubey",
+    "enrollment": "25003111016031005",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0017",
+    "signature": "9C0E100928C7",
+    "scan_code": "VC6-0017-9C0E100928C7"
+  },
+  {
+    "name": "Chandra Prakash Suthar",
+    "enrollment": "25003111016031009",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0018",
+    "signature": "4FAFF5653075",
+    "scan_code": "VC6-0018-4FAFF5653075"
+  },
+  {
+    "name": "Navneet Singh",
+    "enrollment": "25003111016031030",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0019",
+    "signature": "208AB1A49520",
+    "scan_code": "VC6-0019-208AB1A49520"
+  },
+  {
+    "name": "Charvi",
+    "enrollment": "25003111016031011",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0020",
+    "signature": "F07D94D623D6",
+    "scan_code": "VC6-0020-F07D94D623D6"
+  },
+  {
+    "name": "Saumya Mishra",
+    "enrollment": "25003111016031044",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0021",
+    "signature": "E8FE18BBD007",
+    "scan_code": "VC6-0021-E8FE18BBD007"
+  },
+  {
+    "name": "Shreyashee Gupta",
+    "enrollment": "25003111016031049",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0022",
+    "signature": "DA5BD6CF9E74",
+    "scan_code": "VC6-0022-DA5BD6CF9E74"
+  },
+  {
+    "name": "Ayushman Dutta",
+    "enrollment": "25003111016031008",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0023",
+    "signature": "858D9C3F57AE",
+    "scan_code": "VC6-0023-858D9C3F57AE"
+  },
+  {
+    "name": "Pratham Bhardwaj",
+    "enrollment": "25003111016031036",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0024",
+    "signature": "C58F96482A32",
+    "scan_code": "VC6-0024-C58F96482A32"
+  },
+  {
+    "name": "Saksham Sharma",
+    "enrollment": "25003111016031061",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0025",
+    "signature": "006B61B22231",
+    "scan_code": "VC6-0025-006B61B22231"
+  },
+  {
+    "name": "Palak",
+    "enrollment": "25003111016031035",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0026",
+    "signature": "0AB6778A7389",
+    "scan_code": "VC6-0026-0AB6778A7389"
+  },
+  {
+    "name": "Mahi Shashi",
+    "enrollment": "25003111016031026",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0027",
+    "signature": "96C0A19E288A",
+    "scan_code": "VC6-0027-96C0A19E288A"
+  },
+  {
+    "name": "Harshit Ram",
+    "enrollment": "26003111062042006",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0028",
+    "signature": "C84C4121390E",
+    "scan_code": "VC6-0028-C84C4121390E"
+  },
+  {
+    "name": "Shivansh Sahajpal",
+    "enrollment": "25003111016031047",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0029",
+    "signature": "77B227A91DD2",
+    "scan_code": "VC6-0029-77B227A91DD2"
+  },
+  {
+    "name": "Sakshi Phulwari",
+    "enrollment": "25003111016031042",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0030",
+    "signature": "5AC5BBBD773F",
+    "scan_code": "VC6-0030-5AC5BBBD773F"
+  },
+  {
+    "name": "Sakshi Priya",
+    "enrollment": "25003111016031062",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0031",
+    "signature": "793881222624",
+    "scan_code": "VC6-0031-793881222624"
+  },
+  {
+    "name": "Sneha Maity",
+    "enrollment": "25003111016031063",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0032",
+    "signature": "7B90697783DA",
+    "scan_code": "VC6-0032-7B90697783DA"
+  },
+  {
+    "name": "Shubham Kumar Gupta",
+    "enrollment": "25003111016031050",
+    "batch": "2nd Year",
+    "pass_id": "VC6-0033",
+    "signature": "56874F265702",
+    "scan_code": "VC6-0033-56874F265702"
+  },
+  {
+    "name": "Ritabrata Ghosh",
+    "enrollment": "26003111016031054",
+    "batch": "1st Year",
+    "pass_id": "VC6-0034",
+    "signature": "F0780F4447FA",
+    "scan_code": "VC6-0034-F0780F4447FA"
+  },
+  {
+    "name": "Jiya Patel",
+    "enrollment": "26003111016031019",
+    "batch": "1st Year",
+    "pass_id": "VC6-0035",
+    "signature": "DC936AD46EEB",
+    "scan_code": "VC6-0035-DC936AD46EEB"
+  },
+  {
+    "name": "Bedabrata Taraphdar",
+    "enrollment": "26003111016031010",
+    "batch": "1st Year",
+    "pass_id": "VC6-0036",
+    "signature": "5343B5D42302",
+    "scan_code": "VC6-0036-5343B5D42302"
+  },
+  {
+    "name": "Devin Laliyawala",
+    "enrollment": "26003111016031014",
+    "batch": "1st Year",
+    "pass_id": "VC6-0037",
+    "signature": "83E696C827FC",
+    "scan_code": "VC6-0037-83E696C827FC"
+  },
+  {
+    "name": "Aaryan Agrawal",
+    "enrollment": "26003111016031001",
+    "batch": "1st Year",
+    "pass_id": "VC6-0038",
+    "signature": "ACD92FCD9978",
+    "scan_code": "VC6-0038-ACD92FCD9978"
+  },
+  {
+    "name": "Jaineel Vaidya",
+    "enrollment": "26003111016031018",
+    "batch": "1st Year",
+    "pass_id": "VC6-0039",
+    "signature": "97C1DA18F056",
+    "scan_code": "VC6-0039-97C1DA18F056"
+  },
+  {
+    "name": "Devanshi A Kawaiya",
+    "enrollment": "26003111016031013",
+    "batch": "1st Year",
+    "pass_id": "VC6-0040",
+    "signature": "D01A873FCE3D",
+    "scan_code": "VC6-0040-D01A873FCE3D"
+  },
+  {
+    "name": "Nitya Chaudhary",
+    "enrollment": "26003111016031032",
+    "batch": "1st Year",
+    "pass_id": "VC6-0041",
+    "signature": "8EAE6BE7A7D0",
+    "scan_code": "VC6-0041-8EAE6BE7A7D0"
+  },
+  {
+    "name": "Mayank Poriya",
+    "enrollment": "26003111016031029",
+    "batch": "1st Year",
+    "pass_id": "VC6-0042",
+    "signature": "D3E6BB6213D1",
+    "scan_code": "VC6-0042-D3E6BB6213D1"
+  },
+  {
+    "name": "Siddhangana Bain",
+    "enrollment": "26003111016031045",
+    "batch": "1st Year",
+    "pass_id": "VC6-0043",
+    "signature": "F8C064B0DEBB",
+    "scan_code": "VC6-0043-F8C064B0DEBB"
+  },
+  {
+    "name": "Siddhi Khadgi",
+    "enrollment": "26003111016031046",
+    "batch": "1st Year",
+    "pass_id": "VC6-0044",
+    "signature": "EBA2DDC63695",
+    "scan_code": "VC6-0044-EBA2DDC63695"
+  },
+  {
+    "name": "Mridul Patil",
+    "enrollment": "26003111016031057",
+    "batch": "1st Year",
+    "pass_id": "VC6-0045",
+    "signature": "7A10B52361E9",
+    "scan_code": "VC6-0045-7A10B52361E9"
+  },
+  {
+    "name": "Yash Pratap",
+    "enrollment": "26003111016031051",
+    "batch": "1st Year",
+    "pass_id": "VC6-0046",
+    "signature": "83E84399FD0B",
+    "scan_code": "VC6-0046-83E84399FD0B"
+  },
+  {
+    "name": "Anand Shankar",
+    "enrollment": "26003111016031007",
+    "batch": "1st Year",
+    "pass_id": "VC6-0047",
+    "signature": "35C07692D42A",
+    "scan_code": "VC6-0047-35C07692D42A"
+  },
+  {
+    "name": "Harsh Joshi",
+    "enrollment": "26003111016031020",
+    "batch": "1st Year",
+    "pass_id": "VC6-0048",
+    "signature": "92987DEBD25B",
+    "scan_code": "VC6-0048-92987DEBD25B"
+  },
+  {
+    "name": "Shauryasahajpal",
+    "enrollment": "26003111016031043",
+    "batch": "1st Year",
+    "pass_id": "VC6-0049",
+    "signature": "C450D8373F16",
+    "scan_code": "VC6-0049-C450D8373F16"
+  },
+  {
+    "name": "Samridhi Kumari",
+    "enrollment": "26003111016031041",
+    "batch": "1st Year",
+    "pass_id": "VC6-0050",
+    "signature": "DF4FB737D336",
+    "scan_code": "VC6-0050-DF4FB737D336"
+  },
+  {
+    "name": "Nitya Raghuwanshi",
+    "enrollment": "26003111016031059",
+    "batch": "1st Year",
+    "pass_id": "VC6-0051",
+    "signature": "7405CA81FAED",
+    "scan_code": "VC6-0051-7405CA81FAED"
+  },
+  {
+    "name": "Surbhi Kumari",
+    "enrollment": "26003111016031048",
+    "batch": "1st Year",
+    "pass_id": "VC6-0052",
+    "signature": "CBE9609E2D0C",
+    "scan_code": "VC6-0052-CBE9609E2D0C"
+  },
+  {
+    "name": "Jahnavi Prasad",
+    "enrollment": "26003111016031017",
+    "batch": "1st Year",
+    "pass_id": "VC6-0053",
+    "signature": "927604FF8006",
+    "scan_code": "VC6-0053-927604FF8006"
+  },
+  {
+    "name": "Varad Gupta",
+    "enrollment": "26003111016031050",
+    "batch": "1st Year",
+    "pass_id": "VC6-0054",
+    "signature": "C9429422D4D5",
+    "scan_code": "VC6-0054-C9429422D4D5"
+  },
+  {
+    "name": "Akshu Pareek",
+    "enrollment": "26003111016031006",
+    "batch": "1st Year",
+    "pass_id": "VC6-0055",
+    "signature": "6FB868EB34B8",
+    "scan_code": "VC6-0055-6FB868EB34B8"
+  },
+  {
+    "name": "Dhatri Chawla",
+    "enrollment": "26003111016031015",
+    "batch": "1st Year",
+    "pass_id": "VC6-0056",
+    "signature": "AE23BCA7F5FF",
+    "scan_code": "VC6-0056-AE23BCA7F5FF"
+  },
+  {
+    "name": "Yug Desai",
+    "enrollment": "26003111016031052",
+    "batch": "1st Year",
+    "pass_id": "VC6-0057",
+    "signature": "8A0628ADC3CB",
+    "scan_code": "VC6-0057-8A0628ADC3CB"
+  },
+  {
+    "name": "Anshu Pareek",
+    "enrollment": "26003111016031008",
+    "batch": "1st Year",
+    "pass_id": "VC6-0058",
+    "signature": "B81334449986",
+    "scan_code": "VC6-0058-B81334449986"
+  },
+  {
+    "name": "Katyayni Sharma",
+    "enrollment": "26003111016031023",
+    "batch": "1st Year",
+    "pass_id": "VC6-0059",
+    "signature": "383076CB8340",
+    "scan_code": "VC6-0059-383076CB8340"
+  },
+  {
+    "name": "Ishaan Singh",
+    "enrollment": "26003111016031016",
+    "batch": "1st Year",
+    "pass_id": "VC6-0060",
+    "signature": "393366698644",
+    "scan_code": "VC6-0060-393366698644"
+  },
+  {
+    "name": "Aashi Srivastava",
+    "enrollment": "26003111016031002",
+    "batch": "1st Year",
+    "pass_id": "VC6-0061",
+    "signature": "634B2464A464",
+    "scan_code": "VC6-0061-634B2464A464"
+  },
+  {
+    "name": "Riti Patel",
+    "enrollment": "26003111016031039",
+    "batch": "1st Year",
+    "pass_id": "VC6-0062",
+    "signature": "8C3C95A9C561",
+    "scan_code": "VC6-0062-8C3C95A9C561"
+  },
+  {
+    "name": "Prerit Kishan",
+    "enrollment": "26003111016031037",
+    "batch": "1st Year",
+    "pass_id": "VC6-0063",
+    "signature": "30F1CD9F2FF5",
+    "scan_code": "VC6-0063-30F1CD9F2FF5"
+  },
+  {
+    "name": "Karunya Varma",
+    "enrollment": "26003111016031022",
+    "batch": "1st Year",
+    "pass_id": "VC6-0064",
+    "signature": "3CAFAFA8EDC9",
+    "scan_code": "VC6-0064-3CAFAFA8EDC9"
+  },
+  {
+    "name": "Navachaithanya M",
+    "enrollment": "26003111016031031",
+    "batch": "1st Year",
+    "pass_id": "VC6-0065",
+    "signature": "00DF2FD0F6A1",
+    "scan_code": "VC6-0065-00DF2FD0F6A1"
+  },
+  {
+    "name": "Prasoon",
+    "enrollment": "26003111016031011",
+    "batch": "1st Year",
+    "pass_id": "VC6-0066",
+    "signature": "75ECD30A84AE",
+    "scan_code": "VC6-0066-75ECD30A84AE"
+  },
+  {
+    "name": "Kemal Sha",
+    "enrollment": "26003111016031025",
+    "batch": "1st Year",
+    "pass_id": "VC6-0067",
+    "signature": "8C9564099CAF",
+    "scan_code": "VC6-0067-8C9564099CAF"
+  },
+  {
+    "name": "Om Kasurkar",
+    "enrollment": "26003111016031033",
+    "batch": "1st Year",
+    "pass_id": "VC6-0068",
+    "signature": "831FE1B350CF",
+    "scan_code": "VC6-0068-831FE1B350CF"
+  },
+  {
+    "name": "Pavitra Kapadiya",
+    "enrollment": "26003111015031035",
+    "batch": "1st Year",
+    "pass_id": "VC6-0069",
+    "signature": "6FE3E8D561EA",
+    "scan_code": "VC6-0069-6FE3E8D561EA"
+  },
+  {
+    "name": "Arsh ArpitKumar Chav",
+    "enrollment": "26003111016031009",
+    "batch": "1st Year",
+    "pass_id": "VC6-0070",
+    "signature": "DC5DAFEAADA6",
+    "scan_code": "VC6-0070-DC5DAFEAADA6"
+  },
+  {
+    "name": "Patil Vaibhav",
+    "enrollment": "26003111016031055",
+    "batch": "1st Year",
+    "pass_id": "VC6-0071",
+    "signature": "2B2B314EDDF4",
+    "scan_code": "VC6-0071-2B2B314EDDF4"
+  },
+  {
+    "name": "Maitreyi Sharma",
+    "enrollment": "26003111016031053",
+    "batch": "1st Year",
+    "pass_id": "VC6-0072",
+    "signature": "52AAD6A4F07F",
+    "scan_code": "VC6-0072-52AAD6A4F07F"
+  },
+  {
+    "name": "PULKIT UPADHYAY",
+    "enrollment": "26003111016031038",
+    "batch": "1st Year",
+    "pass_id": "VC6-0073",
+    "signature": "8BC4B1A998DA",
+    "scan_code": "VC6-0073-8BC4B1A998DA"
+  },
+  {
+    "name": "Ajad",
+    "enrollment": "26003111016031005",
+    "batch": "1st Year",
+    "pass_id": "VC6-0074",
+    "signature": "C352CBDEFA44",
+    "scan_code": "VC6-0074-C352CBDEFA44"
+  },
+  {
+    "name": "Deepak Kumar",
+    "enrollment": "26003111016031012",
+    "batch": "1st Year",
+    "pass_id": "VC6-0075",
+    "signature": "01BB748A20AE",
+    "scan_code": "VC6-0075-01BB748A20AE"
+  },
+  {
+    "name": "Lakshay",
+    "enrollment": "26003111016031026",
+    "batch": "1st Year",
+    "pass_id": "VC6-0076",
+    "signature": "D02C12ABA32E",
+    "scan_code": "VC6-0076-D02C12ABA32E"
+  },
+  {
+    "name": "Pankaj Kumar Ranwa",
+    "enrollment": "26003111016031034",
+    "batch": "1st Year",
+    "pass_id": "VC6-0077",
+    "signature": "2317E31D65DA",
+    "scan_code": "VC6-0077-2317E31D65DA"
+  },
+  {
+    "name": "Madhav Patidar",
+    "enrollment": "26003111016031028",
+    "batch": "1st Year",
+    "pass_id": "VC6-0078",
+    "signature": "536267EC18C6",
+    "scan_code": "VC6-0078-536267EC18C6"
+  },
+  {
+    "name": "Pratyush",
+    "enrollment": "26003111016031036",
+    "batch": "1st Year",
+    "pass_id": "VC6-0079",
+    "signature": "2094C81F18BB",
+    "scan_code": "VC6-0079-2094C81F18BB"
+  },
+  {
+    "name": "Vamsi",
+    "enrollment": "26003111016031027",
+    "batch": "1st Year",
+    "pass_id": "VC6-0080",
+    "signature": "DC4E66B82791",
+    "scan_code": "VC6-0080-DC4E66B82791"
+  },
+  {
+    "name": "Saurabh Kumar",
+    "enrollment": "26003111016031042",
+    "batch": "1st Year",
+    "pass_id": "VC6-0081",
+    "signature": "7778B4548D03",
+    "scan_code": "VC6-0081-7778B4548D03"
+  },
+  {
+    "name": "Adarsh Pratap Singh",
+    "enrollment": "26003111016031004",
+    "batch": "1st Year",
+    "pass_id": "VC6-0082",
+    "signature": "B1D403304A05",
+    "scan_code": "VC6-0082-B1D403304A05"
+  }
+]
