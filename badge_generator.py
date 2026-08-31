@@ -1,19 +1,18 @@
 """
-GTA VI / Vice City — VIP Party Badge Generator (Cyber Matrix Medallion Edition)
+GTA VI / Vice City — VIP Party Badge Generator (82 Unique Color Hue & VIP Number Medallion Edition)
 - Square Borderless Badge (900x900)
 - Clean Pure White Background
 - 2 Miami Palm Trees with DIFFERENT Orientations & Natural Curvatures
 - Top: Ultra-Sharp Crystal Clear GTA Vice City Cursive Name & Year in Vibrant Royal Blue
-- Center: 100% Instant-Scannable Cyber Matrix Medallion (Layered ON TOP of palm fronds)
+- Center: 82 UNIQUE Rainbow Hue & VIP Pass Number Medallion (Layered ON TOP of palm fronds)
 - Bottom: 82 UNIQUE Batch-Tailored Brutal & Hilarious Party Slogans in Clean Dark Glass Capsule
 """
 
 from PIL import Image, ImageDraw, ImageFont
-import hashlib
 import math
 import os
 import json
-import qrcode
+import colorsys
 
 BADGE_SIZE = 900
 BADGES_DIR = "badges"
@@ -158,6 +157,13 @@ def get_gta_pbp_gradient(t):
         g = int(20 * (1 - st) + 20 * st)
         b = int(220 * (1 - st) + 160 * st)
     return (r, g, b)
+
+
+def get_attendee_color(idx, total=82):
+    """Generates 82 perfectly distinct saturated colors evenly spaced around the color wheel."""
+    hue = (idx % total) / float(total)
+    r, g, b = colorsys.hsv_to_rgb(hue, 0.92, 0.95)
+    return (int(r * 255), int(g * 255), int(b * 255))
 
 
 def generate_left_palm(w=440, h=680):
@@ -341,11 +347,12 @@ def generate_right_palm(w=440, h=680):
     return grad_img.resize((w, h), resample)
 
 
-def generate_cyber_radial_medallion(scan_code, size=430):
-    """Generates the Vice City Cyber Matrix Medallion:
-    - Glowing neon cyan & magenta outer cyber rings
-    - High-contrast Vice City Matrix Code in center
-    - Corner cyber brackets for instant 1ms camera lock-on
+def generate_vip_color_number_medallion(pass_num, attendee_idx=0, size=430):
+    """Generates a GLOWING GRADIENT COLOR medallion with neon cyber rings:
+    - Outer neon cyan & magenta cyber rings
+    - Inner disc filled with glowing radiant gradient of the unique attendee color
+      (bright/white center fading to saturated hue at edges — glowing orb effect)
+    - Giant bold white VIP pass number ('01' through '82')
     """
     scale = 2
     S = size * scale
@@ -354,7 +361,7 @@ def generate_cyber_radial_medallion(scan_code, size=430):
     cx, cy = S // 2, S // 2
     r_disc = S // 2 - 20 * scale
 
-    # Outer Neon Glowing Cyber Rings
+    # ── Outer Neon Glowing Cyber Rings ──
     draw.ellipse(
         [cx - r_disc, cy - r_disc, cx + r_disc, cy + r_disc],
         fill=(10, 15, 30, 255),
@@ -362,47 +369,70 @@ def generate_cyber_radial_medallion(scan_code, size=430):
         width=7 * scale,
     )
     draw.ellipse(
-        [cx - r_disc + 7 * scale, cy - r_disc + 7 * scale, cx + r_disc - 7 * scale, cy + r_disc - 7 * scale],
+        [cx - r_disc + 7 * scale, cy - r_disc + 7 * scale,
+         cx + r_disc - 7 * scale, cy + r_disc - 7 * scale],
         outline=(255, 0, 127, 255),
         width=4 * scale,
     )
 
-    # Cyber Matrix QR Code (Level H Error Correction for 100% instant low-light scan)
-    qr = qrcode.QRCode(
-        version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_H,
-        box_size=12 * scale,
-        border=2,
+    # ── Inner Glowing Gradient Disc (unique attendee color) ──
+    c_rgb = get_attendee_color(attendee_idx)
+    inner_r = r_disc - 16 * scale
+
+    disc_img = Image.new("RGBA", (inner_r * 2, inner_r * 2), (0, 0, 0, 0))
+    ddraw = ImageDraw.Draw(disc_img)
+    for rad in range(inner_r, 0, -1):
+        t = rad / inner_r  # 1.0 at edge, 0.0 at center
+        # Glowing orb: center is bright/white, edges are saturated color
+        r = int(c_rgb[0] * t + 255 * (1 - t))
+        g = int(c_rgb[1] * t + 255 * (1 - t))
+        b = int(c_rgb[2] * t + 255 * (1 - t))
+        ddraw.ellipse(
+            [inner_r - rad, inner_r - rad, inner_r + rad, inner_r + rad],
+            fill=(r, g, b, 255),
+        )
+
+    img.paste(disc_img, (cx - inner_r, cy - inner_r), disc_img)
+    draw.ellipse(
+        [cx - inner_r, cy - inner_r, cx + inner_r, cy + inner_r],
+        outline=(0, 229, 255, 255),
+        width=2 * scale,
     )
-    qr.add_data(scan_code)
-    qr.make(fit=True)
-    
-    qr_img = qr.make_image(fill_color=(255, 255, 255), back_color=(10, 15, 30)).convert("RGBA")
-    qr_size = int(r_disc * 1.32)
-    qr_resized = qr_img.resize((qr_size, qr_size), Image.Resampling.NEAREST)
-    
-    qx = cx - qr_size // 2
-    qy = cy - qr_size // 2
-    img.paste(qr_resized, (qx, qy), qr_resized)
-    
-    # Corner brackets (Cyan top, Pink bottom)
-    pad = 4 * scale
-    b_len = 18 * scale
-    b_w = 3 * scale
-    draw.line([(qx - pad, qy - pad), (qx - pad + b_len, qy - pad)], fill=(0, 229, 255, 255), width=b_w)
-    draw.line([(qx - pad, qy - pad), (qx - pad, qy - pad + b_len)], fill=(0, 229, 255, 255), width=b_w)
-    draw.line([(qx + qr_size + pad, qy - pad), (qx + qr_size + pad - b_len, qy - pad)], fill=(0, 229, 255, 255), width=b_w)
-    draw.line([(qx + qr_size + pad, qy - pad), (qx + qr_size + pad, qy - pad + b_len)], fill=(0, 229, 255, 255), width=b_w)
-    draw.line([(qx - pad, qy + qr_size + pad), (qx - pad + b_len, qy + qr_size + pad)], fill=(255, 0, 127, 255), width=b_w)
-    draw.line([(qx - pad, qy + qr_size + pad), (qx - pad, qy + qr_size + pad - b_len)], fill=(255, 0, 127, 255), width=b_w)
-    draw.line([(qx + qr_size + pad, qy + qr_size + pad), (qx + qr_size + pad - b_len, qy + qr_size + pad)], fill=(255, 0, 127, 255), width=b_w)
-    draw.line([(qx + qr_size + pad, qy + qr_size + pad), (qx + qr_size + pad, qy - b_len + qr_size + pad)], fill=(255, 0, 127, 255), width=b_w)
+
+    # ── Top VIP Badge Header ──
+    label_font = get_font(["C:/Windows/Fonts/SEGOEUIB.TTF", "C:/Windows/Fonts/ARIALBD.TTF"], 26 * scale)
+    lbl = "VIP ACCESS"
+    bbox_lbl = draw.textbbox((0, 0), lbl, font=label_font)
+    lw = bbox_lbl[2] - bbox_lbl[0]
+    draw.text((cx - lw // 2, cy - inner_r + 34 * scale), lbl, font=label_font, fill=(0, 229, 255, 255))
+
+    # ── Giant Bold White Number ──
+    num_str = f"{pass_num:02d}"
+    num_font = get_font(["C:/Windows/Fonts/IMPACT.TTF", "C:/Windows/Fonts/ARIALBD.TTF"], 138 * scale)
+    bbox_num = draw.textbbox((0, 0), num_str, font=num_font)
+    nw = bbox_num[2] - bbox_num[0]
+    nh = bbox_num[3] - bbox_num[1]
+
+    nx = cx - nw // 2
+    ny = cy - nh // 2 + 10 * scale
+
+    # 3D Shadow + Solid Pure White Digits
+    draw.text((nx + 6 * scale, ny + 6 * scale), num_str, font=num_font, fill=(0, 0, 0, 240))
+    draw.text((nx + 3 * scale, ny + 3 * scale), num_str, font=num_font, fill=(255, 0, 127, 255))
+    draw.text((nx, ny), num_str, font=num_font, fill=(255, 255, 255, 255))
+
+    # ── Bottom Sub-Tag: 'PASS #09' ──
+    sub_font = get_font(["C:/Windows/Fonts/SEGOEUIB.TTF", "C:/Windows/Fonts/ARIALBD.TTF"], 24 * scale)
+    sub_lbl = f"PASS #{pass_num:02d}"
+    bbox_sub = draw.textbbox((0, 0), sub_lbl, font=sub_font)
+    sw = bbox_sub[2] - bbox_sub[0]
+    draw.text((cx - sw // 2, cy + inner_r - 50 * scale), sub_lbl, font=sub_font, fill=(255, 0, 127, 255))
 
     resample = getattr(Image, "Resampling", Image).LANCZOS if hasattr(Image, "Resampling") else getattr(Image, "LANCZOS", 1)
     return img.resize((size, size), resample)
 
 
-def create_badge(student, slogan_text, left_palm, right_palm):
+def create_badge(student, slogan_text, left_palm, right_palm, attendee_idx=0):
     img = Image.new("RGBA", (BADGE_SIZE, BADGE_SIZE), (255, 255, 255, 255))
 
     # 1. TWO Asymmetrical Miami Palm Trees with different orientation & curvatures
@@ -413,11 +443,11 @@ def create_badge(student, slogan_text, left_palm, right_palm):
         right_palm,
     )
 
-    # 2. CENTER: Cyber Matrix Medallion (Layered ON TOP of palm fronds)
+    # 2. CENTER: Color VIP Number Medallion (Layered ON TOP of palm fronds)
     medallion_size = 430
-    scan_target = student.get("scan_code") or student["pass_id"]
-    medallion = generate_cyber_radial_medallion(
-        scan_target, size=medallion_size
+    pass_num = int(student["pass_id"].split("-")[1])
+    medallion = generate_vip_color_number_medallion(
+        pass_num, attendee_idx=attendee_idx, size=medallion_size
     )
     mx = (BADGE_SIZE - medallion_size) // 2
     my = 275
@@ -501,7 +531,7 @@ def main():
     right_palm = generate_right_palm(440, 680)
 
     total = len(students)
-    print(f"Rendering {total} Crystal Clear GTA VI VIP Badges with Cyber Matrix Medallions...")
+    print(f"Rendering {total} Crystal Clear GTA VI VIP Badges with 82 Unique Color Hue & VIP Number Medallions...")
 
     sen_idx = 0
     jun_idx = 0
@@ -514,10 +544,10 @@ def main():
             slogan = JUNIOR_SLOGANS_49[jun_idx % len(JUNIOR_SLOGANS_49)]
             jun_idx += 1
 
-        badge = create_badge(s, slogan, left_palm, right_palm)
+        badge = create_badge(s, slogan, left_palm, right_palm, attendee_idx=i)
         out_path = os.path.join(BADGES_DIR, f"{s['pass_id']}.png")
         badge.save(out_path, quality=98)
-        print(f"[{i+1}/{total}] Generated: {s['pass_id']} — {s['name']} ({s['batch']})")
+        print(f"[{i+1}/{total}] Generated: {s['pass_id']} — {s['name']} (#{i+1:02d})")
 
     print(f"\nAll {total} passes successfully generated in '{BADGES_DIR}/' folder!")
 
