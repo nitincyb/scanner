@@ -3,6 +3,7 @@ import json
 import time
 import hmac
 import hashlib
+import re
 from datetime import datetime
 from flask import Flask, render_template, request, jsonify, send_from_directory
 
@@ -45,6 +46,7 @@ def load_meal_db():
                 "pass_id": s["pass_id"],
                 "signature": s.get("signature", ""),
                 "scan_code": s.get("scan_code", ""),
+                "slogan": s.get("slogan", ""),
                 "starter_served": False,
                 "starter_time": None,
                 "main_served": False,
@@ -56,7 +58,17 @@ def load_meal_db():
 
     try:
         with open(MEAL_DB_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
+            db = json.load(f)
+            # Ensure slogan is in records
+            students_map = {s["pass_id"]: s.get("slogan", "") for s in get_students_data()}
+            updated = False
+            for pid, rec in db.items():
+                if "slogan" not in rec and pid in students_map:
+                    rec["slogan"] = students_map[pid]
+                    updated = True
+            if updated:
+                save_meal_db(db)
+            return db
     except Exception:
         return {}
 
@@ -75,11 +87,18 @@ def verify_hmac(pass_id: str, signature: str) -> bool:
     return hmac.compare_digest(expected, signature.upper())
 
 
+def clean_text_tokens(text: str):
+    """Normalize text into word tokens for robust fuzzy matching."""
+    text = re.sub(r"[^a-zA-Z0-9\s]", " ", text.lower())
+    return set(w for w in text.split() if len(w) >= 3)
+
+
 def parse_and_find_student(input_str: str, meal_db: dict):
     input_str = input_str.strip()
     if not input_str:
         return None, "Empty input provided."
 
+    # 1. Direct Scan Code / HMAC Pass ID
     if input_str.startswith("VC6-") and "-" in input_str[4:]:
         parts = input_str.split("-")
         if len(parts) >= 3:
@@ -92,20 +111,51 @@ def parse_and_find_student(input_str: str, meal_db: dict):
             return None, f"Pass ID {pass_id} not found in database."
 
     upper_input = input_str.upper()
+
+    # 2. Pass ID Regex Match (e.g. VC6-0009 or VC6 0009 or VC60009)
+    p_match = re.search(r"VC6\s*-?\s*0*([1-9][0-9]?)", upper_input)
+    if p_match:
+        num = int(p_match.group(1))
+        target_pid = f"VC6-{num:04d}"
+        if target_pid in meal_db:
+            return meal_db[target_pid], None
+
+    # 3. Direct Key Match (pass_id, enrollment, exact name)
     if upper_input in meal_db:
         return meal_db[upper_input], None
 
     for record in meal_db.values():
         if record.get("enrollment") == input_str:
             return record, None
-
-    matches = []
-    for record in meal_db.values():
         if upper_input == record.get("name", "").upper():
             return record, None
-        if upper_input in record.get("name", "").upper():
-            matches.append(record)
 
+    # 4. Slogan Match (Each attendee has a unique printed slogan!)
+    input_tokens = clean_text_tokens(input_str)
+    if input_tokens:
+        best_match = None
+        best_score = 0
+
+        for record in meal_db.values():
+            slogan = record.get("slogan", "")
+            slogan_tokens = clean_text_tokens(slogan)
+            if slogan_tokens:
+                overlap = len(input_tokens.intersection(slogan_tokens))
+                score = overlap / len(slogan_tokens)
+                if overlap >= 2 and score > best_score:
+                    best_score = score
+                    best_match = record
+
+            # Also check Name tokens
+            name_tokens = clean_text_tokens(record.get("name", ""))
+            if name_tokens and name_tokens.issubset(input_tokens):
+                return record, None
+
+        if best_match and best_score >= 0.25:
+            return best_match, None
+
+    # 5. Name Substring Match
+    matches = [r for r in meal_db.values() if upper_input in r.get("name", "").upper()]
     if len(matches) == 1:
         return matches[0], None
     elif len(matches) > 1:
@@ -232,10 +282,18 @@ def process_scan_image():
     # 1. Filename match (e.g. VC6-0009.png)
     if filename:
         clean_name = os.path.splitext(filename)[0].upper()
+        # Look for VC6-XXXX in filename
+        p_match = re.search(r"VC6\s*-?\s*0*([1-9][0-9]?)", clean_name)
+        if p_match:
+            num = int(p_match.group(1))
+            target_pid = f"VC6-{num:04d}"
+            if target_pid in meal_db:
+                return handle_meal_claim(meal_db[target_pid], meal_db, force_override=False)
+
         if clean_name in meal_db:
             return handle_meal_claim(meal_db[clean_name], meal_db, force_override=False)
 
-    # 2. Text match
+    # 2. Text / Slogan / OCR Match
     if text_content:
         student, _ = parse_and_find_student(text_content, meal_db)
         if student:
@@ -295,13 +353,13 @@ def search_students():
     meal_db = load_meal_db()
 
     if not q:
-        # Return all attendees if no query (for local caching)
         return jsonify([
             {
                 "pass_id": s["pass_id"],
                 "name": s["name"],
                 "enrollment": s["enrollment"],
                 "batch": s["batch"],
+                "slogan": s.get("slogan", ""),
                 "starter_served": s.get("starter_served", False),
                 "main_served": s.get("main_served", False),
                 "scan_code": s.get("scan_code", "")
@@ -313,17 +371,19 @@ def search_students():
     for s in meal_db.values():
         if (q in s.get("name", "").upper() or
             q in s.get("pass_id", "").upper() or
-            q in s.get("enrollment", "")):
+            q in s.get("enrollment", "") or
+            q in s.get("slogan", "").upper()):
             results.append({
                 "pass_id": s["pass_id"],
                 "name": s["name"],
                 "enrollment": s["enrollment"],
                 "batch": s["batch"],
+                "slogan": s.get("slogan", ""),
                 "starter_served": s.get("starter_served", False),
                 "main_served": s.get("main_served", False),
                 "scan_code": s.get("scan_code", "")
             })
-            if len(results) >= 15:
+            if len(results) >= 20:
                 break
 
     return jsonify(results)
