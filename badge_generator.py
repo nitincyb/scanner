@@ -485,12 +485,14 @@ def create_badge(student, slogan_text, left_palm, right_palm):
     draw.text((yx + 1, yy + 1), year_text, font=year_font, fill=(0, 45, 130))
     draw.text((yx, yy), year_text, font=year_font, fill=CRYSTAL_ROYAL_BLUE)
 
-    # 4. BOTTOM: UNIQUE Brutal & Funny Slogan tailored by Batch
-    quote_font = get_sans_font(23)
-    bbox_q = draw.textbbox((0, 0), f"“ {slogan_text} ”", font=quote_font)
+    # 4. BOTTOM: UNIQUE Brutal & Funny Slogan + Crisp Pass ID
+    pass_id_str = student["pass_id"]
+    quote_font = get_sans_font(21)
+    full_bottom_text = f"“ {slogan_text} ”   •   {pass_id_str}"
+    bbox_q = draw.textbbox((0, 0), full_bottom_text, font=quote_font)
     qw = bbox_q[2] - bbox_q[0]
     qx = (BADGE_SIZE - qw) // 2
-    qy = BADGE_SIZE - 76
+    qy = BADGE_SIZE - 74
 
     pad_x, pad_y = 18, 9
     # Dark glassmorphism capsule with clean border
@@ -502,7 +504,7 @@ def create_badge(student, slogan_text, left_palm, right_palm):
         width=2
     )
 
-    draw.text((qx, qy), f"“ {slogan_text} ”", font=quote_font, fill=(248, 250, 252, 255))
+    draw.text((qx, qy), full_bottom_text, font=quote_font, fill=(248, 250, 252, 255))
 
     return img.convert("RGB")
 

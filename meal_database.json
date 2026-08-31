@@ -120,17 +120,24 @@
     "scan_code": "VC6-0009-53088E35666B",
     "starter_served": true,
     "starter_time": 1788159747.4886546,
-    "main_served": false,
-    "main_time": null,
+    "main_served": true,
+    "main_time": 1788162243.0114589,
     "logs": [
       {
         "meal": "STARTER",
         "time": "2026-08-31 12:32:27",
         "epoch": 1788159747.4886546
+      },
+      {
+        "meal": "MAIN_COURSE",
+        "time": "2026-08-31 13:14:03",
+        "epoch": 1788162243.0114589,
+        "forced": false
       }
     ],
     "starter_time_str": "2026-08-31 12:32:27",
-    "slogan": "Ek saal me hostel mess ne itna dard diya ki ab party me sukoon mila."
+    "slogan": "Ek saal me hostel mess ne itna dard diya ki ab party me sukoon mila.",
+    "main_time_str": "2026-08-31 13:14:03"
   },
   "VC6-0010": {
     "name": "Mukund Kundan",
