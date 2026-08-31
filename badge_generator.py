@@ -1,12 +1,10 @@
 """
-GTA VI / Vice City — VIP Party Badge Generator (Asymmetrical Palm Orientation)
+GTA VI / Vice City — VIP Party Badge Generator (Cyber Matrix Medallion Edition)
 - Square Borderless Badge (900x900)
 - Clean Pure White Background
-- 2 Miami Palm Trees with DIFFERENT Orientations & Natural Curvatures:
-  * Left Palm: Taller, sweeping gentle S-curve with high arching fronds
-  * Right Palm: Unique graceful outward-inward bow with distinct dynamic frond spread
+- 2 Miami Palm Trees with DIFFERENT Orientations & Natural Curvatures
 - Top: Ultra-Sharp Crystal Clear GTA Vice City Cursive Name & Year in Vibrant Royal Blue
-- Center: Cyber Sonic Pulse Medallion layered ON TOP of the palm fronds
+- Center: 100% Instant-Scannable Cyber Matrix Medallion (Layered ON TOP of palm fronds)
 - Bottom: 82 UNIQUE Batch-Tailored Brutal & Hilarious Party Slogans in Clean Dark Glass Capsule
 """
 
@@ -15,6 +13,7 @@ import hashlib
 import math
 import os
 import json
+import qrcode
 
 BADGE_SIZE = 900
 BADGES_DIR = "badges"
@@ -198,104 +197,18 @@ def generate_left_palm(w=440, h=680):
         (-170, 0.66, 0.30, 1.15),
         (-145, 0.75, 0.25, 1.05),
         (-120, 0.78, 0.20, 0.95),
-        (-95, 0.80, 0.15, 0.90),
-        (-70, 0.76, 0.20, 0.95),
-        (-45, 0.70, 0.25, 1.05),
-        (-20, 0.62, 0.30, 1.15),
-        (5, 0.50, 0.35, 1.25),
-        (-155, 0.46, 0.44, 0.85),
-        (-115, 0.52, 0.38, 0.78),
-        (-75, 0.52, 0.38, 0.78),
-        (-35, 0.44, 0.44, 0.85),
-    ]
-
-    for ang, flen_ratio, arch, sag in fronds:
-        flen = w * scale * flen_ratio
-        rad = math.radians(ang)
-        spine = []
-        for s in range(32):
-            st = s / 31.0
-            sx = top_x + st * flen * math.cos(rad)
-            sy = top_y + st * flen * math.sin(rad) * arch + (st**2.1) * flen * 0.44 * sag
-            spine.append((sx, sy))
-        for k in range(1, len(spine) - 1):
-            st = k / len(spine)
-            px, py = spine[k]
-            dx = spine[k + 1][0] - spine[k - 1][0]
-            dy = spine[k + 1][1] - spine[k - 1][1]
-            tangent = math.atan2(dy, dx)
-            leaf_w = math.sin(st * math.pi) * (w * 0.19 * scale) + 3 * scale
-            for side in [-1, 1]:
-                la = tangent + side * (1.28 - st * 0.25)
-                tip_x = px + leaf_w * math.cos(la)
-                tip_y = py + leaf_w * math.sin(la) + (st**1.8) * 12 * scale
-                draw.polygon(
-                    [(px, py), (tip_x, tip_y), (px + dx * 0.5, py + dy * 0.5)],
-                    fill=255,
-                )
-        for k in range(len(spine) - 1):
-            w_line = max(2 * scale, int((1 - k / len(spine)) * 5 * scale))
-            draw.line([spine[k], spine[k + 1]], fill=255, width=w_line)
-
-    grad_img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-    gdraw = ImageDraw.Draw(grad_img)
-    for y in range(H):
-        t = y / H
-        c = get_gta_pbp_gradient(t)
-        gdraw.line([(0, y), (W, y)], fill=(c[0], c[1], c[2], 255))
-
-    grad_img.putalpha(mask)
-    resample = getattr(Image, "Resampling", Image).LANCZOS if hasattr(Image, "Resampling") else getattr(Image, "LANCZOS", 1)
-    return grad_img.resize((w, h), resample)
-
-
-def generate_right_palm(w=420, h=640):
-    """Right Tree: Different height, slightly sharper inward lean, different frond angles & canopy silhouette."""
-    scale = 2
-    W, H = w * scale, h * scale
-    mask = Image.new("L", (W, H), 0)
-    draw = ImageDraw.Draw(mask)
-
-    base_x = w * 0.72 * scale
-    base_y = H - 2
-    trunk_h = H * 0.72
-
-    trunk_l, trunk_r = [], []
-    for i in range(121):
-        t = i / 120
-        y = base_y - t * trunk_h
-        # Different wave curvature (t^1.1 power curvature instead of pure sine)
-        cx = base_x - (math.pow(t, 1.15) * (w * 0.26 * scale))
-        r = (21 * scale) * (1.0 - t * 0.58)
-        trunk_l.append((cx - r, y))
-        trunk_r.insert(0, (cx + r, y))
-
-    draw.polygon(trunk_l + trunk_r, fill=255)
-    top_x, top_y = (trunk_l[-1][0] + trunk_r[0][0]) / 2, trunk_l[-1][1]
-
-    for ox, oy in [(-7, -5), (8, -3), (-5, 7), (9, 7), (0, -8)]:
-        r = 12 * scale
-        draw.ellipse(
-            [top_x + ox * scale - r, top_y + oy * scale - r,
-             top_x + ox * scale + r, top_y + oy * scale + r],
-            fill=255,
-        )
-
-    # Distinct right foliage (different angles, lengths and sag ratios)
-    fronds = [
-        (-185, 0.52, 0.38, 1.15),
-        (-160, 0.60, 0.32, 1.05),
-        (-135, 0.68, 0.28, 0.98),
-        (-110, 0.74, 0.22, 0.88),
-        (-85, 0.76, 0.18, 0.84),
-        (-60, 0.74, 0.22, 0.88),
-        (-35, 0.68, 0.28, 0.98),
-        (-10, 0.60, 0.32, 1.05),
-        (15, 0.52, 0.38, 1.15),
-        (-145, 0.42, 0.40, 0.82),
-        (-105, 0.48, 0.35, 0.75),
-        (-65, 0.48, 0.35, 0.75),
-        (-25, 0.42, 0.40, 0.82),
+        (-95, 0.82, 0.16, 0.85),
+        (-72, 0.85, 0.14, 0.78),
+        (-50, 0.88, 0.15, 0.75),
+        (-28, 0.86, 0.20, 0.78),
+        (-6, 0.82, 0.26, 0.85),
+        (15, 0.76, 0.32, 0.95),
+        (38, 0.68, 0.38, 1.05),
+        (60, 0.58, 0.44, 1.18),
+        (-135, 0.55, 0.22, 0.90),
+        (-75, 0.62, 0.12, 0.70),
+        (-15, 0.58, 0.18, 0.75),
+        (45, 0.50, 0.32, 0.95),
     ]
 
     for ang, flen_ratio, arch, sag in fronds:
@@ -338,7 +251,102 @@ def generate_right_palm(w=420, h=640):
     return grad_img.resize((w, h), resample)
 
 
-def generate_cyber_radial_medallion(pass_id, size=430):
+def generate_right_palm(w=440, h=680):
+    """Right Tree: Different curvature, lower outward base with sharp inward sweep."""
+    scale = 2
+    W, H = w * scale, h * scale
+    mask = Image.new("L", (W, H), 0)
+    draw = ImageDraw.Draw(mask)
+
+    base_x = w * 0.72 * scale
+    base_y = H - 2
+    trunk_h = H * 0.73
+
+    trunk_l, trunk_r = [], []
+    for i in range(121):
+        t = i / 120
+        y = base_y - t * trunk_h
+        cx = base_x - (math.sin(t * 1.55) * (w * 0.32 * scale)) + (t**2.0) * (w * 0.08 * scale)
+        r = (24 * scale) * (1.0 - t * 0.58)
+        trunk_l.append((cx - r, y))
+        trunk_r.insert(0, (cx + r, y))
+
+    draw.polygon(trunk_l + trunk_r, fill=255)
+    top_x, top_y = (trunk_l[-1][0] + trunk_r[0][0]) / 2, trunk_l[-1][1]
+
+    for ox, oy in [(-8, -6), (10, -3), (-3, 7), (12, 5), (0, -8)]:
+        r = 14 * scale
+        draw.ellipse(
+            [top_x + ox * scale - r, top_y + oy * scale - r,
+             top_x + ox * scale + r, top_y + oy * scale + r],
+            fill=255,
+        )
+
+    fronds = [
+        (15, 0.58, 0.32, 1.22),
+        (-10, 0.68, 0.28, 1.10),
+        (-35, 0.78, 0.22, 1.00),
+        (-60, 0.82, 0.18, 0.90),
+        (-85, 0.86, 0.15, 0.82),
+        (-110, 0.88, 0.14, 0.76),
+        (-132, 0.85, 0.16, 0.78),
+        (-155, 0.80, 0.22, 0.84),
+        (-178, 0.72, 0.28, 0.94),
+        (-198, 0.64, 0.36, 1.05),
+        (-220, 0.54, 0.42, 1.15),
+        (-240, 0.44, 0.48, 1.25),
+        (-50, 0.60, 0.20, 0.85),
+        (-105, 0.65, 0.12, 0.68),
+        (-160, 0.56, 0.19, 0.76),
+        (-215, 0.48, 0.30, 0.90),
+    ]
+
+    for ang, flen_ratio, arch, sag in fronds:
+        flen = w * scale * flen_ratio
+        rad = math.radians(ang)
+        spine = []
+        for s in range(32):
+            st = s / 31.0
+            sx = top_x + st * flen * math.cos(rad)
+            sy = top_y + st * flen * math.sin(rad) * arch + (st**2.1) * flen * 0.42 * sag
+            spine.append((sx, sy))
+        for k in range(1, len(spine) - 1):
+            st = k / len(spine)
+            px, py = spine[k]
+            dx = spine[k + 1][0] - spine[k - 1][0]
+            dy = spine[k + 1][1] - spine[k - 1][1]
+            tangent = math.atan2(dy, dx)
+            leaf_w = math.sin(st * math.pi) * (w * 0.17 * scale) + 3 * scale
+            for side in [-1, 1]:
+                la = tangent + side * (1.28 - st * 0.25)
+                tip_x = px + leaf_w * math.cos(la)
+                tip_y = py + leaf_w * math.sin(la) + (st**1.8) * 11 * scale
+                draw.polygon(
+                    [(px, py), (tip_x, tip_y), (px + dx * 0.5, py + dy * 0.5)],
+                    fill=255,
+                )
+        for k in range(len(spine) - 1):
+            w_line = max(2 * scale, int((1 - k / len(spine)) * 5 * scale))
+            draw.line([spine[k], spine[k + 1]], fill=255, width=w_line)
+
+    grad_img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    gdraw = ImageDraw.Draw(grad_img)
+    for y in range(H):
+        t = y / H
+        c = get_gta_pbp_gradient(t)
+        gdraw.line([(0, y), (W, y)], fill=(c[0], c[1], c[2], 255))
+
+    grad_img.putalpha(mask)
+    resample = getattr(Image, "Resampling", Image).LANCZOS if hasattr(Image, "Resampling") else getattr(Image, "LANCZOS", 1)
+    return grad_img.resize((w, h), resample)
+
+
+def generate_cyber_radial_medallion(scan_code, size=430):
+    """Generates the Vice City Cyber Matrix Medallion:
+    - Glowing neon cyan & magenta outer cyber rings
+    - High-contrast Vice City Matrix Code in center
+    - Corner cyber brackets for instant 1ms camera lock-on
+    """
     scale = 2
     S = size * scale
     img = Image.new("RGBA", (S, S), (0, 0, 0, 0))
@@ -359,38 +367,36 @@ def generate_cyber_radial_medallion(pass_id, size=430):
         width=4 * scale,
     )
 
-    # 24 Bold Quantized Data Rays with White Terminal Dots
-    hash_bytes = hashlib.sha256(pass_id.encode("utf-8")).digest()
-    num_bars = 24
-    inner_r = r_disc * 0.36
-    max_len = r_disc * 0.48
-
-    for i in range(num_bars):
-        angle = (i / num_bars) * 2 * math.pi
-        level = (hash_bytes[i % len(hash_bytes)] % 6) + 1
-        bar_len = inner_r + (level / 6.0) * max_len
-
-        x1 = cx + math.cos(angle) * inner_r
-        y1 = cy + math.sin(angle) * inner_r
-        x2 = cx + math.cos(angle) * bar_len
-        y2 = cy + math.sin(angle) * bar_len
-
-        col = (0, 229, 255, 255) if math.sin(angle) < 0 else (255, 0, 127, 255)
-        draw.line([(x1, y1), (x2, y2)], fill=col, width=7 * scale)
-        dot_r = 5 * scale
-        draw.ellipse([x2 - dot_r, y2 - dot_r, x2 + dot_r, y2 + dot_r], fill=(255, 255, 255, 255))
-
-    # Center Bullseye Core
-    draw.ellipse(
-        [cx - inner_r * 0.82, cy - inner_r * 0.82, cx + inner_r * 0.82, cy + inner_r * 0.82],
-        fill=(15, 23, 42, 255),
-        outline=(0, 229, 255, 255),
-        width=4 * scale,
+    # Cyber Matrix QR Code (Level H Error Correction for 100% instant low-light scan)
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_H,
+        box_size=12 * scale,
+        border=2,
     )
-    draw.ellipse(
-        [cx - inner_r * 0.38, cy - inner_r * 0.38, cx + inner_r * 0.38, cy + inner_r * 0.38],
-        fill=(255, 0, 127, 255),
-    )
+    qr.add_data(scan_code)
+    qr.make(fit=True)
+    
+    qr_img = qr.make_image(fill_color=(255, 255, 255), back_color=(10, 15, 30)).convert("RGBA")
+    qr_size = int(r_disc * 1.32)
+    qr_resized = qr_img.resize((qr_size, qr_size), Image.Resampling.NEAREST)
+    
+    qx = cx - qr_size // 2
+    qy = cy - qr_size // 2
+    img.paste(qr_resized, (qx, qy), qr_resized)
+    
+    # Corner brackets (Cyan top, Pink bottom)
+    pad = 4 * scale
+    b_len = 18 * scale
+    b_w = 3 * scale
+    draw.line([(qx - pad, qy - pad), (qx - pad + b_len, qy - pad)], fill=(0, 229, 255, 255), width=b_w)
+    draw.line([(qx - pad, qy - pad), (qx - pad, qy - pad + b_len)], fill=(0, 229, 255, 255), width=b_w)
+    draw.line([(qx + qr_size + pad, qy - pad), (qx + qr_size + pad - b_len, qy - pad)], fill=(0, 229, 255, 255), width=b_w)
+    draw.line([(qx + qr_size + pad, qy - pad), (qx + qr_size + pad, qy - pad + b_len)], fill=(0, 229, 255, 255), width=b_w)
+    draw.line([(qx - pad, qy + qr_size + pad), (qx - pad + b_len, qy + qr_size + pad)], fill=(255, 0, 127, 255), width=b_w)
+    draw.line([(qx - pad, qy + qr_size + pad), (qx - pad, qy + qr_size + pad - b_len)], fill=(255, 0, 127, 255), width=b_w)
+    draw.line([(qx + qr_size + pad, qy + qr_size + pad), (qx + qr_size + pad - b_len, qy + qr_size + pad)], fill=(255, 0, 127, 255), width=b_w)
+    draw.line([(qx + qr_size + pad, qy + qr_size + pad), (qx + qr_size + pad, qy - b_len + qr_size + pad)], fill=(255, 0, 127, 255), width=b_w)
 
     resample = getattr(Image, "Resampling", Image).LANCZOS if hasattr(Image, "Resampling") else getattr(Image, "LANCZOS", 1)
     return img.resize((size, size), resample)
@@ -407,10 +413,11 @@ def create_badge(student, slogan_text, left_palm, right_palm):
         right_palm,
     )
 
-    # 2. CENTER: Cyber Sonic Medallion (Layered ON TOP of palm fronds)
+    # 2. CENTER: Cyber Matrix Medallion (Layered ON TOP of palm fronds)
     medallion_size = 430
+    scan_target = student.get("scan_code") or student["pass_id"]
     medallion = generate_cyber_radial_medallion(
-        student["pass_id"], size=medallion_size
+        scan_target, size=medallion_size
     )
     mx = (BADGE_SIZE - medallion_size) // 2
     my = 275
@@ -448,10 +455,10 @@ def create_badge(student, slogan_text, left_palm, right_palm):
     bbox_y = draw.textbbox((0, 0), year_text, font=year_font)
     yw = bbox_y[2] - bbox_y[0]
     yx = (BADGE_SIZE - yw) // 2
-    yy = ny + (bbox_n[3] - bbox_n[1]) + 6
+    yy = ny + (bbox_n[3] - bbox_n[1]) + 2
 
-    draw.text((yx + 3, yy + 3), year_text, font=year_font, fill=CRISP_SHADOW_NAVY)
-    draw.text((yx + 1, yy + 1), year_text, font=year_font, fill=(0, 45, 130))
+    draw.text((yx + 4, yy + 4), year_text, font=year_font, fill=CRISP_SHADOW_NAVY)
+    draw.text((yx + 2, yy + 2), year_text, font=year_font, fill=(0, 45, 130))
     draw.text((yx, yy), year_text, font=year_font, fill=CRYSTAL_ROYAL_BLUE)
 
     # 4. BOTTOM: UNIQUE Brutal & Funny Slogan + Crisp Pass ID
@@ -460,55 +467,60 @@ def create_badge(student, slogan_text, left_palm, right_palm):
     full_bottom_text = f"“ {slogan_text} ”   •   {pass_id_str}"
     bbox_q = draw.textbbox((0, 0), full_bottom_text, font=quote_font)
     qw = bbox_q[2] - bbox_q[0]
+    qh = bbox_q[3] - bbox_q[1]
     qx = (BADGE_SIZE - qw) // 2
-    qy = BADGE_SIZE - 74
+    qy = BADGE_SIZE - 82
 
-    pad_x, pad_y = 18, 9
-    # Dark glassmorphism capsule with clean border
+    # Elegant Dark Glass Capsule with Cyber Neon Outline
+    pad_x, pad_y = 24, 10
+    pill_box = [qx - pad_x, qy - pad_y, qx + qw + pad_x, qy + qh + pad_y]
     draw.rounded_rectangle(
-        [qx - pad_x, qy - pad_y, qx + qw + pad_x, qy + (bbox_q[3] - bbox_q[1]) + pad_y],
+        pill_box,
         radius=14,
-        fill=(15, 23, 42, 245),
-        outline=(0, 229, 255, 220),
-        width=2
+        fill=SOLID_BLACK,
+        outline=(0, 229, 255, 255),
+        width=2,
     )
-
-    draw.text((qx, qy), full_bottom_text, font=quote_font, fill=(248, 250, 252, 255))
+    draw.text((qx, qy), full_bottom_text, font=quote_font, fill=(255, 255, 255, 255))
 
     return img.convert("RGB")
 
 
-def generate_all_badges():
-    os.makedirs(BADGES_DIR, exist_ok=True)
-    print("Generating passes with distinct asymmetrical palm tree orientations...")
-    left_palm = generate_left_palm(w=440, h=680)
-    right_palm = generate_right_palm(w=420, h=640)
+def main():
+    if not os.path.exists("students.json"):
+        print("Error: students.json not found! Run generate_dataset.py first.")
+        return
 
     with open("students.json", "r", encoding="utf-8") as f:
         students = json.load(f)
 
-    senior_idx = 0
-    junior_idx = 0
+    os.makedirs(BADGES_DIR, exist_ok=True)
 
-    for i, student in enumerate(students):
-        is_senior = (student.get("batch") == "2nd Year")
-        if is_senior:
-            slogan = SENIOR_SLOGANS_33[senior_idx % len(SENIOR_SLOGANS_33)]
-            senior_idx += 1
-            cat = "Senior"
+    print("Pre-rendering Asymmetrical Palm Tree Foliage...")
+    left_palm = generate_left_palm(440, 680)
+    right_palm = generate_right_palm(440, 680)
+
+    total = len(students)
+    print(f"Rendering {total} Crystal Clear GTA VI VIP Badges with Cyber Matrix Medallions...")
+
+    sen_idx = 0
+    jun_idx = 0
+
+    for i, s in enumerate(students):
+        if "2nd" in s["batch"]:
+            slogan = SENIOR_SLOGANS_33[sen_idx % len(SENIOR_SLOGANS_33)]
+            sen_idx += 1
         else:
-            slogan = JUNIOR_SLOGANS_49[junior_idx % len(JUNIOR_SLOGANS_49)]
-            junior_idx += 1
-            cat = "Junior"
+            slogan = JUNIOR_SLOGANS_49[jun_idx % len(JUNIOR_SLOGANS_49)]
+            jun_idx += 1
 
-        badge = create_badge(student, slogan, left_palm, right_palm)
-        fname = f"{student['pass_id']}.png"
-        filepath = os.path.join(BADGES_DIR, fname)
-        badge.save(filepath, quality=98)
-        print(f"  [OK] {fname} -> {student['name']} ({student['batch']} / {cat}) | Slogan: \"{slogan}\"")
+        badge = create_badge(s, slogan, left_palm, right_palm)
+        out_path = os.path.join(BADGES_DIR, f"{s['pass_id']}.png")
+        badge.save(out_path, quality=98)
+        print(f"[{i+1}/{total}] Generated: {s['pass_id']} — {s['name']} ({s['batch']})")
 
-    print(f"\n[SUCCESS] Generated all {len(students)} passes with distinct asymmetrical palms -> {BADGES_DIR}/")
+    print(f"\nAll {total} passes successfully generated in '{BADGES_DIR}/' folder!")
 
 
 if __name__ == "__main__":
-    generate_all_badges()
+    main()

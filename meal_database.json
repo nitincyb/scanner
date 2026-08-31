@@ -120,17 +120,17 @@
     "scan_code": "VC6-0009-53088E35666B",
     "slogan": "Ek saal me hostel mess ne itna dard diya ki ab party me sukoon mila.",
     "starter_served": true,
-    "starter_time": 1788164296.4203928,
+    "starter_time": 1788164760.6990898,
     "main_served": false,
     "main_time": null,
     "logs": [
       {
         "meal": "STARTER",
-        "time": "2026-08-31 13:48:16",
-        "epoch": 1788164296.4203928
+        "time": "2026-08-31 13:56:00",
+        "epoch": 1788164760.6990898
       }
     ],
-    "starter_time_str": "2026-08-31 13:48:16"
+    "starter_time_str": "2026-08-31 13:56:00"
   },
   "VC6-0010": {
     "name": "Mukund Kundan",
@@ -1107,17 +1107,17 @@
     "scan_code": "VC6-0079-2094C81F18BB",
     "slogan": "College crush ko party me dekha, ab agle 4 saal motivation set hai.",
     "starter_served": true,
-    "starter_time": 1788164296.7980988,
+    "starter_time": 1788164760.7088127,
     "main_served": false,
     "main_time": null,
     "logs": [
       {
         "meal": "STARTER",
-        "time": "2026-08-31 13:48:16",
-        "epoch": 1788164296.7980988
+        "time": "2026-08-31 13:56:00",
+        "epoch": 1788164760.7088127
       }
     ],
-    "starter_time_str": "2026-08-31 13:48:16"
+    "starter_time_str": "2026-08-31 13:56:00"
   },
   "VC6-0080": {
     "name": "Vamsi",

@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Ultra-Fast 60FPS In-Browser Cyber QR Decoder (jsQR) -->
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 
   <style>
     :root {
@@ -245,31 +247,6 @@
       font-weight: 600;
       cursor: pointer;
       z-index: 20;
-    }
-
-    .capture-btn {
-      position: absolute;
-      bottom: 44px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      border: 3px solid rgba(255, 255, 255, 0.85);
-      background: linear-gradient(135deg, var(--cyan), var(--pink));
-      cursor: pointer;
-      z-index: 20;
-      box-shadow: 0 0 20px rgba(0, 229, 255, 0.6);
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.15rem;
-    }
-
-    .capture-btn:hover {
-      transform: translateX(-50%) scale(1.1);
-      box-shadow: 0 0 30px rgba(0, 229, 255, 0.9);
     }
 
     /* ── Live Scanner Status Bar ── */
@@ -546,7 +523,7 @@
       <!-- Status Bar -->
       <div class="scanner-live-bar" id="live-status-bar">
         <span class="logo-pulse"></span>
-        <span id="live-status-text">Hold Center Medallion Inside Radar Reticle</span>
+        <span id="live-status-text">⚡ Instant Radar Active — Point at Center Medallion</span>
       </div>
 
       <!-- Status Alert Banner -->
@@ -562,9 +539,8 @@
           <div class="target-radar"></div>
           <div class="target-inner-ring"></div>
           <div class="scan-laser"></div>
-          <div class="reticle-label">HOLD CENTER CIRCLE IN RADAR</div>
+          <div class="reticle-label">GTA VI CYBER MATRIX TARGET</div>
           <button class="flip-btn" onclick="switchCamera()">🔄 Flip Cam</button>
-          <button class="capture-btn" onclick="captureAndScanMedallion()">📸</button>
         </div>
       </div>
 
@@ -637,7 +613,7 @@
     </div>
   </main>
 
-  <canvas id="scan-canvas" style="display:none;"></canvas>
+  <canvas id="qr-canvas" style="display:none;"></canvas>
 
   <script>
     let activeStream = null;
@@ -645,6 +621,7 @@
     let attendeesDB = [];
     let isProcessing = false;
     let scanCooldown = false;
+    let animFrameId = null;
 
     // ── Load Attendees ──
     async function loadAttendees() {
@@ -750,8 +727,8 @@
         const video = document.getElementById('camera-feed');
         video.srcObject = activeStream;
         await video.play();
-        document.getElementById('live-status-text').innerHTML = 'Radar Active — Align center circle inside reticle';
-        startAutoScanningLoop();
+        document.getElementById('live-status-text').innerHTML = '⚡ Instant Radar Active — Point at Center Medallion';
+        requestAnimationFrame(tickScanLoop);
       } catch (err) {
         document.getElementById('live-status-text').innerHTML =
           '<span style="color:var(--orange);">Camera unavailable — Use "Upload Pass Image" or Instant Search below</span>';
@@ -763,105 +740,44 @@
       startCamera();
     }
 
-    // ── Real-time Automatic Center Medallion Scanner Loop ──
-    function startAutoScanningLoop() {
+    // ── Ultra-Fast 60FPS In-Browser Cyber QR Decoder (0ms latency) ──
+    function tickScanLoop() {
       const video = document.getElementById('camera-feed');
-      const canvas = document.getElementById('scan-canvas');
-      const ctx = canvas.getContext('2d');
+      const canvas = document.getElementById('qr-canvas');
 
-      setInterval(async () => {
-        if (isProcessing || scanCooldown || !activeStream || video.readyState !== 4) return;
-        isProcessing = true;
+      if (video.readyState === video.HAVE_ENOUGH_DATA && !scanCooldown) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-        try {
-          // Capture 480x480 crop from center of camera stream
-          const vW = video.videoWidth || 640;
-          const vH = video.videoHeight || 480;
-          const side = Math.min(vW, vH);
-          const sx = (vW - side) / 2;
-          const sy = (vH - side) / 2;
-
-          canvas.width = 430;
-          canvas.height = 430;
-          ctx.drawImage(video, sx, sy, side, side, 0, 0, 430, 430);
-          
-          const frameB64 = canvas.toDataURL('image/jpeg', 0.88);
-
-          const res = await fetch('/api/scan_medallion', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ image: frameB64 })
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        
+        // 1. Instant 60 FPS Client-Side Decode via jsQR
+        if (typeof jsQR !== 'undefined') {
+          const code = jsQR(imageData.data, imageData.width, imageData.height, {
+            inversionAttempts: 'both'
           });
 
-          if (res.ok) {
-            const data = await res.json();
-            showBanner(data);
-            loadAttendees();
-            loadStats();
-            loadActivity();
-            triggerScanCooldown();
+          if (code && code.data && code.data.startsWith('VC6-')) {
+            console.log('Instant 60FPS Cyber Lock:', code.data);
+            claimMeal(code.data);
           }
-        } catch (err) {
-        } finally {
-          isProcessing = false;
         }
-      }, 450);
-    }
-
-    // ── Manual Capture Button (Instant Tap Scan) ──
-    async function captureAndScanMedallion() {
-      if (isProcessing || scanCooldown) return;
-      const video = document.getElementById('camera-feed');
-      if (!activeStream || video.readyState !== 4) return;
-
-      isProcessing = true;
-      document.getElementById('live-status-text').innerHTML =
-        '<span style="color:var(--cyan);font-weight:700;">Scanning Center Medallion...</span>';
-
-      try {
-        const canvas = document.getElementById('scan-canvas');
-        const ctx = canvas.getContext('2d');
-
-        const vW = video.videoWidth || 640;
-        const vH = video.videoHeight || 480;
-        const side = Math.min(vW, vH);
-        const sx = (vW - side) / 2;
-        const sy = (vH - side) / 2;
-
-        canvas.width = 430;
-        canvas.height = 430;
-        ctx.drawImage(video, sx, sy, side, side, 0, 0, 430, 430);
-        
-        const frameB64 = canvas.toDataURL('image/jpeg', 0.92);
-
-        const res = await fetch('/api/scan_medallion', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ image: frameB64 })
-        });
-
-        const data = await res.json();
-        showBanner(data);
-        loadAttendees();
-        loadStats();
-        loadActivity();
-        if (res.ok) triggerScanCooldown();
-      } catch (err) {
-        showBanner({ status: 'ERROR', badge_color: 'red', title: 'Scan Error', message: 'Could not connect to server.' });
-      } finally {
-        isProcessing = false;
       }
+
+      animFrameId = requestAnimationFrame(tickScanLoop);
     }
 
     function triggerScanCooldown() {
       scanCooldown = true;
-      if (navigator.vibrate) navigator.vibrate(160);
+      if (navigator.vibrate) navigator.vibrate([80, 50, 80]);
       document.getElementById('live-status-text').innerHTML =
         '<span style="color:var(--cyan);font-weight:700;">✓ Center Medallion Authenticated!</span>';
       setTimeout(() => {
         scanCooldown = false;
         if (activeStream) {
-          document.getElementById('live-status-text').innerHTML = 'Radar Active — Align center circle inside reticle';
+          document.getElementById('live-status-text').innerHTML = '⚡ Instant Radar Active — Point at Center Medallion';
         }
       }, 2500);
     }
@@ -881,26 +797,48 @@
       const reader = new FileReader();
       reader.onload = async (e) => {
         const imageB64 = e.target.result;
-        try {
-          const res = await fetch('/api/scan_medallion', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ image: imageB64, filename: file.name })
-          });
+        
+        // Try decoding directly in browser first
+        const img = new Image();
+        img.onload = async () => {
+          const canvas = document.getElementById('qr-canvas');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0);
+          const imgData = ctx.getImageData(0, 0, img.width, img.height);
+          
+          let decodedCode = null;
+          if (typeof jsQR !== 'undefined') {
+            const qrResult = jsQR(imgData.data, imgData.width, imgData.height, { inversionAttempts: 'both' });
+            if (qrResult && qrResult.data) decodedCode = qrResult.data;
+          }
 
-          const data = await res.json();
-          showBanner(data);
-          loadStats();
-          loadActivity();
-          loadAttendees();
-          if (res.ok) triggerScanCooldown();
-        } catch (err) {
-          showBanner({ status: 'ERROR', badge_color: 'red', title: 'Scan Error', message: 'Could not connect to server.' });
-        } finally {
-          input.value = '';
-        }
+          if (decodedCode) {
+            claimMeal(decodedCode);
+          } else {
+            // Send to server fallback
+            try {
+              const res = await fetch('/api/scan_medallion', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ image: imageB64, filename: file.name })
+              });
+              const data = await res.json();
+              showBanner(data);
+              loadStats();
+              loadActivity();
+              loadAttendees();
+              if (res.ok) triggerScanCooldown();
+            } catch (err) {
+              showBanner({ status: 'ERROR', badge_color: 'red', title: 'Scan Error', message: 'Could not connect to server.' });
+            }
+          }
+        };
+        img.src = imageB64;
       };
       reader.readAsDataURL(file);
+      input.value = '';
     }
 
     // ── Claim Meal Action ──
@@ -911,7 +849,7 @@
       if (navigator.vibrate) navigator.vibrate(140);
 
       document.getElementById('live-status-text').innerHTML =
-        '<span style="color:var(--cyan);font-weight:700;">Pass Recognized — Claiming Meal...</span>';
+        '<span style="color:var(--cyan);font-weight:700;">⚡ Medallion Locked — Claiming Meal...</span>';
 
       try {
         const res = await fetch('/api/scan', {
@@ -930,7 +868,7 @@
         setTimeout(() => {
           scanCooldown = false;
           if (activeStream) {
-            document.getElementById('live-status-text').innerHTML = 'Radar Active — Align center circle inside reticle';
+            document.getElementById('live-status-text').innerHTML = '⚡ Instant Radar Active — Point at Center Medallion';
           }
         }, 2200);
       }
